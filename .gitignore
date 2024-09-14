@@ -14,3 +14,4 @@ lib/intellireading_lib.egg-info/*
 .deploy/releases/*
 client/calibre/_releases/*
 .intellireading-backend.venv/*
+test/output.epub
