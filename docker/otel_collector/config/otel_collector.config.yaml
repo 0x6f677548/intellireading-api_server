@@ -1,0 +1,107 @@
+---
+# yamllint disable rule:line-length
+receivers:
+  # TODO: #6 syslog ports should be merged and 
+  #  a single receiver should be used, taking advantage of facility
+  syslog/nginx:
+    udp:
+      listen_address: "0.0.0.0:514"
+    protocol: rfc3164
+    operators:
+      - type: json_parser
+        parse_from: attributes.message
+      - type: copy
+        from: attributes.request
+        to: body
+  syslog/nginx-error:
+    udp:
+      listen_address: "0.0.0.0:50514"
+    protocol: rfc3164
+    operators:
+      - type: regex_parser
+        parse_from: attributes.message
+        regex: '^(?P<time_local>[^ ]* [^ ]*) \[(?P<log_level>[^\]]*)\] (?P<pid>[^:]*): (?P<message>.*)$'   
+      - type: copy
+        from: attributes.log_level
+        to: attributes.severity
+      - type: copy
+        from: attributes.message
+        to: body
+      - type: add
+        field: attributes.service_name
+        value: nginx.error      
+  
+  filelog/unit-access:
+    include: [/tmp/log/api_server/unit-access.log]
+    operators:
+      - type: regex_parser
+        regex: '^(?P<remote_addr>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<time_local>[^\]]*)\] (?P<host>[^ ]*) "(?P<request>[^"]*)" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)" "(?P<http_x_forwarded_for>[^"]*)"$'
+        timestamp:
+          parse_from: attributes.time_local
+          layout: '%d/%b/%Y:%H:%M:%S %z'
+
+      - type: copy
+        from: attributes.request
+        to: body
+      - type: add
+        field: attributes.service_name
+        value: unit.access.api.intellireading
+      - type: add
+        field: attributes.appname
+        value: unit
+
+  fluentforward:
+    endpoint: 0.0.0.0:24224
+
+
+    
+  otlp:
+    protocols:
+      grpc:
+      http:
+  # The prometheus receiver scrapes metrics needed 
+  # for the OpenTelemetry Collector Dashboard.
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otelcol'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8888']
+
+
+processors:
+  resource/env:
+    attributes:
+      - key: env
+        value: ${ENVIRONMENT}
+        action: upsert
+  batch:
+    send_batch_max_size: 100
+    send_batch_size: 10
+    timeout: 10s
+
+exporters:
+  otlp:
+    endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+    headers:
+      api-key: ${OTEL_EXPORTER_OTLP_API_KEY}
+    tls:
+      insecure: ${OTEL_EXPORTER_OTLP_INSECURE}
+  logging:
+    loglevel: debug
+
+service:
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [resource/env, batch]
+      exporters: [otlp]
+    traces:
+      receivers: [otlp]
+      processors: [resource/env, batch]
+      exporters: [otlp]
+    logs:
+      receivers: [fluentforward, syslog/nginx-error, filelog/unit-access, syslog/nginx, otlp]
+      processors: [resource/env, batch]
+      exporters: [otlp]

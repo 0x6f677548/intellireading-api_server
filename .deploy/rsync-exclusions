@@ -1,0 +1,12 @@
+.git
+__pycache__
+intellireading_lib.egg-info
+*.log
+.vscode
+docs/
+.gitignore
+test/
+calibre/
+.deploy/
+tmp/
+.github/

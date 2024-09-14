@@ -1,0 +1,377 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en" xsi:schemaLocation="http://www.w3.org/2002/06/xhtml2/ http://www.w3.org/MarkUp/SCHEMA/xhtml2.xsd">
+  <head>
+    <title>Unknown</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <link rel="stylesheet" type="text/css" href="../stylesheet.css"/>
+<link rel="stylesheet" type="text/css" href="../page_styles.css"/>
+</head>
+  <body class="calibre"><div id="sbo-rt-content" class="calibre1"><section data-type="appendix" epub:type="appendix" data-pdf-bookmark="Appendix A. Helpful Recipes" class="calibre4"><div class="preface" id="appendix-howto">
+<h1 class="calibre11"><span class="firstname">Appendix A. </span>Helpful Recipes</h1>
+
+
+<p class="author1">In this appendix, I’ve compiled a list of recipes for common tasks. This is
+just a selection of recipes that I’ve gathered over time, tasks that I often
+carry out and like to have handy as a reference. By no means is this a complete
+or deep coverage of Linux usage and admin tasks. For a comprehensive
+collection of recipes, I strongly recommend you check out Carla Schroder’s
+<a class="calibre6" href="https://oreil.ly/53Pk9"><em class="calibre7">Linux Cookbook</em></a> (O’Reilly), covering a range of recipes in great detail.</p>
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Gathering System Information" class="calibre4"><div class="preface" id="idm45805425173232">
+<h1 class="calibre12">Gathering System Information</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="system information, gathering" id="idm45805425171680" class="calibre6"></a>To learn about the Linux version, kernel, and other related information, use
+any of the following commands:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">cat /etc/*-release
+cat /proc/version
+uname -a</pre>
+
+<p class="author1">To learn about basic hardware equipment (CPU, RAM, disks), do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">cat /proc/cpuinfo
+cat /proc/meminfo
+cat /proc/diskstats</pre>
+
+<p class="author1">To learn more about the hardware of your system, such as about the BIOS, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">sudo dmidecode -t bios</pre>
+
+<p class="author1">Note for the previous command: other interesting options for <code class="calibre17">-t</code> include
+<code class="calibre17">system</code> and <code class="calibre17">memory</code>.</p>
+
+<p class="author1">To query overall main memory and swap usage, do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">free -ht</pre>
+
+<p class="author1">To query how many file descriptors a process can have, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb">ulimit</code> -n</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Working with Users and Processes" class="calibre4"><div class="preface" id="idm45805425172560">
+<h1 class="calibre12">Working with Users and Processes</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="users" data-secondary="listing" id="idm45805425107680" class="calibre6"></a>You can list logged-in users with either <code class="calibre17">who</code> or <code class="calibre17">w</code> (more detailed output).</p>
+
+<p class="author1">To show system metrics (CPU, memory, etc.) on a per-process basis for a specific
+user, <code class="calibre17">SOMEUSER</code>, use the following command:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">top -U SOMEUSER</pre>
+
+<p class="author1"><a data-type="indexterm" data-primary="process" data-secondary="listing" id="idm45805425094336" class="calibre6"></a>List all processes (for all users) in tree format with details by using:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">ps faux</pre>
+
+<p class="author1">Find a specific process (<code class="calibre17">python</code> here):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">ps -e <code class="p">|</code> grep python</pre>
+
+<p class="author1">To terminate a process, use its PID if you know it (and add <code class="calibre17">-9</code> as a
+parameter if the process ignores this signal):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb">kill</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">PID</code></em></pre>
+
+<p class="author1">Alternatively, you can terminate a process by name using <code class="calibre17">killall</code>.</p>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Gathering File Information" class="calibre4"><div class="preface" id="idm45805425108528">
+<h1 class="calibre12">Gathering File Information</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="file information, gathering" id="idm45805425011216" class="calibre6"></a>To query file details (including filesystem information such as inodes):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="calibre17">stat</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">somefile</code></em></pre>
+
+<p class="author1">To learn about a command, how the shell interprets it, and where the
+executable file is located, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb">type</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">somecommand</code></em><code class="calibre17">
+</code><code class="calibre17">which</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">somebinary</code></em></pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Working with Files and Directories" class="calibre4"><div class="preface" id="idm45805424951024">
+<h1 class="calibre12">Working with Files and Directories</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="files, working with" id="idm45805424949712" class="calibre6"></a>To display the content of a text file called <code class="calibre17">afile</code>:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">cat afile</pre>
+
+<p class="author1"><a data-type="indexterm" data-primary="directories, working with" id="idm45805424948016" class="calibre6"></a>To list the contents of a directory, use <code class="calibre17">ls</code>, and you may wish to further
+use the output. For example, to count the number of files in a directory, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">ls -l /etc <code class="p">|</code>  wc -l</pre>
+
+<p class="author1">Finding files and file content:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="calibre17">find</code><code class="calibre17"> </code><code class="calibre17">/etc</code><code class="calibre17"> </code><code class="calibre17">-name</code><code class="calibre17"> </code><code class="s">"*.conf"</code><code class="calibre17"> </code><a class="calibre6" id="co_helpful_recipes_CO1-1" href="#callout_helpful_recipes_CO1-1"><img src="Images/1.png" alt="1" class="calibre23"/></a><code class="calibre17">
+</code><code class="calibre17">find</code><code class="calibre17"> </code><code class="calibre17">.</code><code class="calibre17"> </code><code class="calibre17">-type</code><code class="calibre17"> </code><code class="calibre17">f</code><code class="calibre17"> </code><code class="calibre17">-exec</code><code class="calibre17"> </code><code class="calibre17">grep</code><code class="calibre17"> </code><code class="calibre17">-H</code><code class="calibre17"> </code><code class="calibre17">FINDME</code><code class="calibre17"> </code><code class="o">{</code><code class="o">}</code><code class="calibre17"> </code><code class="se">\;</code><code class="calibre17"> </code><a class="calibre6" id="co_helpful_recipes_CO1-2" href="#callout_helpful_recipes_CO1-2"><img src="Images/2.png" alt="2" class="calibre23"/></a></pre>
+<dl class="calibre13">
+<dt class="calibre24"><a class="calibre6" id="callout_helpful_recipes_CO1-1" href="#co_helpful_recipes_CO1-1"><img src="Images/1.png" alt="1" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Find files ending in <em class="calibre7">.conf</em> in directory <em class="calibre7">/etc</em>.</p></dd>
+<dt class="calibre24"><a class="calibre6" id="callout_helpful_recipes_CO1-2" href="#co_helpful_recipes_CO1-2"><img src="Images/2.png" alt="2" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Find “FINDME” in current directory by executing <code class="calibre17">grep</code>.</p></dd>
+</dl>
+
+<p class="author1">To show the differences in files, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="calibre17">diff</code><code class="calibre17"> </code><code class="calibre17">-u</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">somefile</code></em><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">anotherfile</code></em></pre>
+
+<p class="author1">To replace characters, use <code class="calibre17">tr</code> like so:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb">echo</code> <code class="s">'Com_Acme_Library'</code> <code class="p">|</code> tr <code class="s">'_A-Z'</code> <code class="s">'.a-z'</code></pre>
+
+<p class="author1">Another way to replace parts of a string is with <code class="calibre17">sed</code> (note that the delimiter
+doesn’t have to be <code class="calibre17">/</code>, which is handy for cases where you replace content in a
+path or URL):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">cat <code class="s">'foo bar baz'</code> <code class="p">|</code> sed -e <code class="s">'s/foo/quux/'</code></pre>
+
+<p class="author1">To create a file of a specific size (for testing), you can use the <code class="calibre17">dd</code> command,
+as shown here:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="calibre17">dd</code><code class="calibre17"> </code><code class="k">if</code><code class="o">=</code><code class="calibre17">/dev/zero</code><code class="calibre17"> </code><code class="nv">of</code><code class="o">=</code><code class="calibre17">output.dat</code><code class="calibre17"> </code><code class="nv">bs</code><code class="o">=</code><code class="m">1024</code><code class="calibre17"> </code><code class="nv">count</code><code class="o">=</code><code class="m">1000</code><code class="calibre17"> </code><a class="calibre6" id="co_helpful_recipes_CO2-1" href="#callout_helpful_recipes_CO2-1"><img src="Images/1.png" alt="1" class="calibre23"/></a></pre>
+<dl class="calibre13">
+<dt class="calibre24"><a class="calibre6" id="callout_helpful_recipes_CO2-1" href="#co_helpful_recipes_CO2-1"><img src="Images/1.png" alt="1" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">This creates a 1 MB file (1,000 times 1 KB blocks) called <em class="calibre7">output.dat</em>
+that is filled with zeros.</p></dd>
+</dl>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Working with Redirection and Pipes" class="calibre4"><div class="preface" id="idm45805424950432">
+<h1 class="calibre12">Working with Redirection and Pipes</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="redirection" id="idm45805424747216" class="calibre6"></a>In <a data-type="xref" href="ch03.xhtml#shell-streams" class="calibre6">“Streams”</a>, we discussed file descriptors and streams. Here are
+a few recipes around this topic.</p>
+
+<p class="author1">File I/O redirection:</p>
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="m">1</code><code class="calibre17">&gt;</code><code class="calibre17"> </code><code class="calibre17"><em class="calibre53">file</em></code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-1" href="#custom_callout_helpful_recipes_CO3-1"><img src="Images/1.png" alt="1" class="calibre23"/></a><code class="calibre17">
+</code><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="m">2</code><code class="calibre17">&gt;</code><code class="calibre17"> </code><code class="calibre17"><em class="calibre53">file</em></code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-2" href="#custom_callout_helpful_recipes_CO3-2"><img src="Images/2.png" alt="2" class="calibre23"/></a><code class="calibre17">
+</code><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="p">&amp;</code><code class="calibre17">&gt;</code><code class="calibre17"> </code><code class="calibre17"><em class="calibre53">file</em></code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-3" href="#custom_callout_helpful_recipes_CO3-3"><img src="Images/3.png" alt="3" class="calibre23"/></a><code class="calibre17">
+</code><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="calibre17">&gt;<em class="calibre53">file</em></code><code class="calibre17"> </code><code class="m">2</code><code class="calibre17">&gt;</code><code class="p">&amp;</code><code class="m">1</code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-4" href="#custom_callout_helpful_recipes_CO3-4"><img src="Images/4.png" alt="4" class="calibre23"/></a><code class="calibre17">
+</code><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="calibre17">&gt;</code><code class="calibre17"> </code><code class="calibre17">/dev/null</code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-5" href="#custom_callout_helpful_recipes_CO3-5"><img src="Images/5.png" alt="5" class="calibre23"/></a><code class="calibre17">
+</code><code class="nb"><em class="calibre53">command</em></code><code class="calibre17"> </code><code class="calibre17">&lt;</code><code class="calibre17"> </code><code class="calibre17"><em class="calibre53">file</em></code><code class="calibre17"> </code><a class="calibre6" id="custom_co_helpful_recipes_CO3-6" href="#custom_callout_helpful_recipes_CO3-6"><img src="Images/6.png" alt="6" class="calibre23"/></a></pre>
+<dl class="calibre13">
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-1" href="#custom_co_helpful_recipes_CO3-1"><img src="Images/1.png" alt="1" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Redirect <code class="calibre17">stdout</code> of <code class="calibre17"><em class="calibre53">command</em></code> into <code class="calibre17"><em class="calibre53">file</em></code>.</p></dd>
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-2" href="#custom_co_helpful_recipes_CO3-2"><img src="Images/2.png" alt="2" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Redirect <code class="calibre17">stderr</code> of <code class="calibre17"><em class="calibre53">command</em></code> into <code class="calibre17"><em class="calibre53">file</em></code>.</p></dd>
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-3" href="#custom_co_helpful_recipes_CO3-3"><img src="Images/3.png" alt="3" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Redirect both <code class="calibre17">stdout</code> and <code class="calibre17">stderr</code> of <code class="calibre17"><em class="calibre53">command</em></code> into <code class="calibre17"><em class="calibre53">file</em></code>.</p></dd>
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-4" href="#custom_co_helpful_recipes_CO3-4"><img src="Images/4.png" alt="4" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">An alternative way to redirect <code class="calibre17">stdout</code> and <code class="calibre17">stderr</code> of <code class="calibre17"><em class="calibre53">command</em></code> into <code class="calibre17"><em class="calibre53">file</em></code>.</p></dd>
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-5" href="#custom_co_helpful_recipes_CO3-5"><img src="Images/5.png" alt="5" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Discard output of <code class="calibre17"><em class="calibre53">command</em></code> (by redirecting it to <em class="calibre7">/dev/null</em>).</p></dd>
+<dt class="calibre24"><a class="calibre6" id="custom_callout_helpful_recipes_CO3-6" href="#custom_co_helpful_recipes_CO3-6"><img src="Images/6.png" alt="6" class="calibre23"/></a></dt>
+<dd class="calibre25"><p class="calibre26">Redirect <code class="calibre17">stdin</code> (inputs <code class="calibre17"><em class="calibre53">file</em></code> to <code class="calibre17"><em class="calibre53">command</em></code>).</p></dd>
+</dl>
+
+<p class="author1"><a data-type="indexterm" data-primary="pipes (|)" id="idm45805424669168" class="calibre6"></a>To connect <code class="calibre17">stdout</code> of one process to <code class="calibre17">stdin</code> of another process, use a
+pipe (<code class="calibre17">|</code>):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><em class="calibre53"><code class="calibre18">cmd1</code></em><code class="calibre17"> </code><code class="p">|</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">cmd2</code></em><code class="calibre17"> </code><code class="p">|</code><code class="calibre17"> </code><em class="calibre53"><code class="calibre18">cmd3</code></em></pre>
+
+<p class="author1">To show the exit codes of each command in a pipe:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="nb">echo</code> <code class="err">${</code><code class="nv">PIPESTATUS</code><code class="p">[@]</code><code class="err">}</code></pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Working with Time and Dates" class="calibre4"><div class="preface" id="idm45805424656720">
+<h1 class="calibre12">Working with Time and Dates</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="time/date handling" id="idm45805424655280" class="calibre6"></a>To query time-related information, such as local and UTC time as well as synchronization
+status, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">timedatectl status</pre>
+
+<p class="author1">Working with dates, you usually want to either get a date or timestamp for the
+current time or convert existing timestamps from one format to another.</p>
+
+<p class="author1">To get the date in the format <code class="calibre17">YYYY-MM-DD</code>—for example, <code class="calibre17">2021-10-09</code>—use the 
+<span class="firstname">following:</span></p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">date +<code class="s">"%Y-%m-%d"</code></pre>
+
+<p class="author1">To generate a Unix epoch timestamp (such as <code class="calibre17">1633787676</code>), do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">date +%s</pre>
+
+<p class="author1">To create an ISO 8601 timestamp for UTC (something like <code class="calibre17">2021-10-09T13:55:47Z</code>),
+you can use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">date -u +<code class="s">"%Y-%m-%dT%H:%M:%SZ"</code></pre>
+
+<p class="author1">Same ISO 8601 timestamp format but for local time:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">date +%FT%TZ</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="Working with Git" class="calibre4"><div class="preface" id="idm45805424656128">
+<h1 class="calibre12">Working with Git</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="Git, working with" id="idm45805424551712" class="calibre6"></a>To clone a Git repo—that is, to make a local copy on your Linux system—use the 
+<span class="firstname">following:</span></p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22"><code class="calibre17">git</code><code class="calibre17"> </code><code class="calibre17">clone</code><code class="calibre17"> </code><code class="calibre17">https://github.com/</code><em class="calibre53"><code class="calibre18">exampleorg</code></em><code class="calibre17">/</code><em class="calibre53"><code class="calibre18">examplerepo</code></em><code class="calibre17">.git</code></pre>
+
+<p class="author1">After the previous <code class="calibre17">git clone</code> command is completed, the Git repo will be in the
+directory <em class="calibre7">examplerepo</em>, and you should execute the rest of the following
+commands in this directory.</p>
+
+<p class="author1">To view local changes in color and show where lines have been added and removed
+side by side, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git diff --color-moved</pre>
+
+<p class="author1">To see what has changed locally (files edited, new files, removed files), do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git status</pre>
+
+<p class="author1">To add all local changes and commit them:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git add --all <code class="o">&amp;&amp;</code> git commit -m <code class="s">"adds a super cool feature"</code></pre>
+
+<p class="author1">To find out the commit ID of the current commit, use:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git rev-parse HEAD</pre>
+
+<p class="author1">To tag a commit with ID <code class="calibre17">HASH</code> using the tag <code class="calibre17">ATAG</code>, do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git tag ATAG HASH</pre>
+
+<p class="author1">To push the local changes to a remote (upstream) repo with a tag <code class="calibre17">ATAG</code>:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git push origin ATAG</pre>
+
+<p class="author1">To see the commit history use <code class="calibre17">git log</code>; specifically, to get a summary, do:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">git log <code class="o">(</code>git describe --tags --abbrev<code class="o">=</code><code class="m">0</code><code class="o">)</code>..HEAD --oneline</pre>
+</div></section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section data-type="sect1" data-pdf-bookmark="System Performance" class="calibre4"><div class="preface" id="idm45805424552560">
+<h1 class="calibre12">System Performance</h1>
+
+<p class="author1"><a data-type="indexterm" data-primary="system performance, testing" id="idm45805424409072" class="calibre6"></a>Sometimes you need to see how fast a device is or how your Linux system
+performs under load. Here some ways to generate system load.</p>
+
+<p class="author1">Simulate memory load (and also burn some CPU cycles) with the following 
+<span class="firstname">command:</span></p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">yes <code class="p">|</code> tr <code class="se">\\</code>n x <code class="p">|</code> head -c 450m <code class="p">|</code> grep z</pre>
+
+<p class="author1">In the preceding pipe, <code class="calibre17">yes</code> generates an endless supply of <code class="calibre17">y</code>
+    characters, each on its own line, and then the <code class="calibre17">tr</code> command converts it
+    into a continuous stream of <code class="calibre17">yx</code> that the <code class="calibre17">head</code> command chops off at 450
+    million bytes (ca. 450 MB). Last but not least, we let <code class="calibre17">grep</code> consume
+    the resulting <code class="calibre17">yx</code> block for something that doesn’t exist (<code class="calibre17">z</code>), and hence
+    we see no output, but it is still generating load.</p>
+
+<p class="author1">More detailed disk usage for a directory:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">du -h /home</pre>
+
+<p class="author1">Listing free disk space (globally, in this case):</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">df -h</pre>
+
+<p class="author1">Load test a disk and measure I/O throughput with:</p>
+
+<pre data-type="programlisting" data-code-language="shell" class="calibre22">dd <code class="k">if</code><code class="o">=</code>/dev/zero <code class="nv">of</code><code class="o">=</code>/home/some/file <code class="nv">bs</code><code class="o">=</code>1G <code class="nv">count</code><code class="o">=</code><code class="m">1</code> <code class="nv">oflag</code><code class="o">=</code>direct</pre>
+</div></section>
+
+
+
+
+
+
+
+</div></section></div></body>
+</html>

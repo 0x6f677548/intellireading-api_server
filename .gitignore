@@ -1,0 +1,16 @@
+*.pyc
+*.prof
+test/test_data/output/*
+.vscode/launch.json
+.venv/*
+.virtualenv/*
+.vscode/settings.json
+src/.deployment
+lib/intellireading_lib.egg-info/*
+.log/api_proxy/*.log
+.log/api_proxy/*.pos
+.log/api_server/*.log
+.log/api_server/*.pos
+.deploy/releases/*
+client/calibre/_releases/*
+.intellireading-backend.venv/*

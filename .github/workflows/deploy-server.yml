@@ -1,0 +1,71 @@
+---
+name: Deploy-> Server containers-> Prod (SSH and rsync)
+# yamllint disable rule:line-length
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+    
+run-name: ${{ github.ref_name }} -> Deploy Server Containers (
+  ${{ github.run_attempt }}
+  )
+
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get current date and time
+        id: datetime
+        run: echo "datetime=$(date +'%Y-%m-%dT%H-%M-%SZ')" >> $GITHUB_OUTPUT
+
+      - name: Display date/time in output (forensics when triaging issues)
+        run: echo ${{ steps.datetime.outputs.datetime }}
+
+      - uses: actions/checkout@v3.6.0
+        with:
+          # This captures the branch/tag reference of the event
+          ref: ${{ github.ref }}  
+
+      - name: Get version
+        id: get-version
+        run: |
+          reference="${{ github.ref }}"
+
+          # check if we have a valid reference. 
+          # It should be a branch or a tag. Parse the version from the tag.
+          if [[ "$reference" == refs/tags/v* ]]; then
+            version_without_prefix="${reference#refs/tags/v}"
+          elif [[ "$reference" == refs/heads/release/v* ]]; then
+            version_without_prefix="${reference#refs/heads/release/v}"
+          else
+            echo "Invalid reference: $reference."
+            echo "This action only works on branches or tags starting with 'v'."
+            echo "If you are using a branch, please use a release branch"
+            echo " starting with 'release/v'."
+            exit 1
+          fi
+          echo "version=$version_without_prefix" >> "$GITHUB_OUTPUT"
+
+      - uses: easingthemes/ssh-deploy@v4.1.8
+        name: ssh deploy
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+          ARGS: "-avzi --delete --exclude=log/ --exclude-from=.deploy/rsync-exclusions "
+          SOURCE: "/"
+          REMOTE_HOST: ${{ vars.PROD_SSH_HOST }}
+          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
+          TARGET: "intellireading/"
+          SCRIPT_BEFORE: |
+            mkdir -p intellireading
+            cd intellireading
+            docker compose --env-file .env.prod down
+          SCRIPT_AFTER: |
+            cd intellireading
+            sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' .env.prod
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ vars.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' .env.prod
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' .env.prod
+            sed -i -e "s,@@API_SERVER_VERSION@@,${{ steps.get-version.outputs.version }},g" .env.prod
+            docker compose --env-file .env.prod up -d --remove-orphans --build

@@ -1,0 +1,22 @@
+FROM otel/opentelemetry-collector-contrib:latest AS otel_contrib_image
+
+FROM alpine:latest
+
+# by default, we will run the otel-collector as the otel user
+ARG USER_UID=10001
+#ARG USER_GID=10001
+# define the running user
+#USER ${USER_UID}:${USER_GID}
+USER ${USER_UID}
+
+
+COPY --from=otel_contrib_image /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+COPY --from=otel_contrib_image /otelcol-contrib /otelcol-contrib
+EXPOSE 4317 55680 55679
+ENTRYPOINT ["/otelcol-contrib"]
+
+# we're binding to all interfaces, so we need to disable the UseLocalHostAsDefaultHost feature gate
+CMD ["--config", "/etc/otel_collector.config.yaml", "--feature-gates", "-component.UseLocalHostAsDefaultHost"]
+
+
+

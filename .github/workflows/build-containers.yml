@@ -1,0 +1,83 @@
+---
+name: Build-> Push Docker images-> GHCR.io
+# yamllint disable rule:line-length
+
+on:
+  release:
+    types: [released]
+  workflow_dispatch:
+
+run-name: ${{ github.ref_name }} -> Push Docker Images (
+  ${{ github.run_attempt }}
+  )
+
+# Defines two custom environment variables for the workflow. 
+# These are used for the Container registry domain, 
+#  and a name for the Docker image that this workflow builds.
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+# There is a single job in this workflow. 
+# It's configured to run on the latest available version of Ubuntu.
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - dockerfile: ./api_proxy/docker/Dockerfile
+            image: ghcr.io/0x6f677548/intellireading/api_proxy
+          - dockerfile: ./api_server/docker/Dockerfile
+            image: ghcr.io/0x6f677548/intellireading/api_server
+          - dockerfile: ./client/docker/Dockerfile
+            image: ghcr.io/0x6f677548/intellireading/client
+          - dockerfile: ./www/docker/Dockerfile
+            image: ghcr.io/0x6f677548/intellireading/www
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Get current date and time
+        id: datetime
+        run: echo "datetime=$(date +'%Y-%m-%dT%H-%M-%SZ')" >> $GITHUB_OUTPUT
+
+      - name: Display date/time in output (forensics when triaging issues)
+        run: echo ${{ steps.datetime.outputs.datetime }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v3.6.0
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      #- name: Set up QEMU
+      #  uses: docker/setup-qemu-action@v2
+        
+      #- name: Set up Docker Buildx
+      #  uses: docker/setup-buildx-action@v2
+        
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ matrix.image }}
+
+      - name: Build and push Docker image 
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+      #    platforms: linux/amd64,linux/arm64
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      #    cache-from: type=gha
+      #    cache-to: type=gha,mode=max
