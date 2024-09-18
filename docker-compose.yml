@@ -2,7 +2,9 @@
 services:
 
   #-------------------------------------------------------------------
-  # api_proxy is a nginx server that serves as a proxy for api_server
+  # api_proxy is a nginx server that acts as a proxy for api_server
+  # ensuring that the api_server is not exposed to the internet
+  # it implements rate limiting, and other security features
   api_proxy:
     container_name: api_proxy
     image: api_proxy
