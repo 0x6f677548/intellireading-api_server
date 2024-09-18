@@ -29,11 +29,11 @@ from intellireading.api_server.utils.configuration import ConfigDict
 _server_config = {}
 
 
-# load the config file from environment variable API_SERVER_CONFIG_FILE.
+# load the config file from environment variable CONFIG_FILE.
 # if the environment variable is not set, use the default config file
 # which is located in ../config/api_server.config.json
 _SERVER_CONFIG_FILE = os.environ.get(
-    "API_SERVER_CONFIG_FILE", "./config/api_server.config.json"
+    "CONFIG_FILE", "./config/api_server.config.json"
 )
 
 # check if we have a relative path and if so, make it absolute

@@ -32,7 +32,7 @@ receivers:
         value: nginx.error      
   
   filelog/unit-access:
-    include: [/tmp/log/api_server/unit-access.log]
+    include: [/var/log/api_server/unit-access.log]
     operators:
       - type: regex_parser
         regex: '^(?P<remote_addr>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<time_local>[^\]]*)\] (?P<host>[^ ]*) "(?P<request>[^"]*)" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)" "(?P<http_x_forwarded_for>[^"]*)"$'
@@ -74,7 +74,7 @@ processors:
   resource/env:
     attributes:
       - key: env
-        value: ${ENVIRONMENT}
+        value: ${TRACING_ENVIRONMENT}
         action: upsert
   batch:
     send_batch_max_size: 100
@@ -88,8 +88,8 @@ exporters:
       api-key: ${OTEL_EXPORTER_OTLP_API_KEY}
     tls:
       insecure: ${OTEL_EXPORTER_OTLP_INSECURE}
-  logging:
-    loglevel: debug
+  debug:
+    verbosity: normal
 
 service:
   pipelines:
@@ -104,4 +104,4 @@ service:
     logs:
       receivers: [fluentforward, syslog/nginx-error, filelog/unit-access, syslog/nginx, otlp]
       processors: [resource/env, batch]
-      exporters: [otlp]
+      exporters: [debug]

@@ -15,9 +15,6 @@ services:
       - otel_collector
     volumes:
       - ./.log/api_proxy:/var/log/nginx
-      - ./docker/api_proxy/config/conf.d/:/etc/nginx/conf.d
-      - ./docker/api_proxy/config/nginx.conf:/etc/nginx/nginx.conf
-      - ./docker/api_proxy/config/cloudflare_ips.conf:/etc/nginx/cloudflare_ips.conf
     ports:
       - 80:80
     networks:
@@ -38,30 +35,6 @@ services:
       - otel_collector
     volumes:
       - ./.log/api_server:/var/log/unit
-
-    environment:
-      # used by api_server itself when booting and reading config
-      - API_SERVER_CONFIG_FILE=${API_SERVER_CONFIG_FILE}
-
-      # used by api_server to identify itself on logs, otel, etc.
-      - API_SERVER_SERVICE_NAME=${API_SERVER_SERVICE_NAME}
-      - API_SERVER_VERSION=${API_SERVER_VERSION}
-      - API_SERVER_INSTANCE_ID=${API_SERVER_INSTANCE_ID}
-
-      # used by api_server to validate incoming requests
-      - API_SERVER_API_KEY=${API_SERVER_API_KEY}
-      
-      # used by api_server to enable/disable turnstile      
-      - API_SERVER_TURNSTILE_ENABLED=${API_SERVER_TURNSTILE_ENABLED}
-      - API_SERVER_TURNSTILE_SECRET_KEY=${API_SERVER_TURNSTILE_SECRET_KEY}
-
-      # used by api_server to enable/disable opentelemetry
-      - API_SERVER_OTEL_ENABLED=${API_SERVER_OTEL_ENABLED}
-      - API_SERVER_OTEL_TRACING_ENABLED=${API_SERVER_OTEL_TRACING_ENABLED}
-      - API_SERVER_OTEL_METRICS_ENABLED=${API_SERVER_OTEL_METRICS_ENABLED}
-      # used by opentelemetry sdk to export traces and metrics
-      - OTEL_EXPORTER_OTLP_ENDPOINT=${API_SERVER_OTEL_EXPORTER_OTLP_ENDPOINT}
-      - OTEL_EXPORTER_OTLP_INSECURE=${API_SERVER_OTEL_EXPORTER_OTLP_INSECURE}
     networks:
       - backend_network
 
@@ -82,15 +55,7 @@ services:
     restart: unless-stopped
 
     volumes:
-      - ./.log:/tmp/log    
-      - ./docker/otel_collector/config/otel_collector.config.yaml:/etc/otel_collector.config.yaml
-    #command: ["--config", "/etc/otel_collector.config.yaml", "--feature-gates", "-component.UseLocalHostAsDefaultHost"]
-    
-    environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=${OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}
-      - OTEL_EXPORTER_OTLP_API_KEY=${OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}
-      - OTEL_EXPORTER_OTLP_INSECURE=${OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_INSECURE}
-      - ENVIRONMENT=${ENVIRONMENT}
+      - ./.log:/var/log/
     networks:
       - backend_network
 

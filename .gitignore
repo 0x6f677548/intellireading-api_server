@@ -15,3 +15,4 @@ lib/intellireading_lib.egg-info/*
 client/calibre/_releases/*
 .intellireading-backend.venv/*
 test/output.epub
+dist/*

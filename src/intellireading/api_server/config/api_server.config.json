@@ -1,12 +1,12 @@
 {
     "authentication": {
         "turnstile" : {
-            "enabled": "${API_SERVER_TURNSTILE_ENABLED}",
-            "secret_key" : "${API_SERVER_TURNSTILE_SECRET_KEY}"
+            "enabled": "${TURNSTILE_ENABLED}",
+            "secret_key" : "${TURNSTILE_SECRET_KEY}"
         },
         "api_key_management" : {
             "valid_api_keys" : 
-                "${API_SERVER_API_KEY}"
+                "${API_KEY}"
             
         }
         
@@ -80,7 +80,7 @@
                 "port": 24224,
                 "level": "NOTSET",
                 "formatter": "fluentd_formatter",
-                "tag": "${API_SERVER_SERVICE_NAME}"
+                "tag": "${SERVICE_NAME}"
             }
 
         },
@@ -96,9 +96,9 @@
                     "where": "%(module)s.%(funcName)s",
                     "stack_trace": "%(exc_text)s",
                     "level": "%(levelname)s",
-                    "service_name": "${API_SERVER_SERVICE_NAME}",
-                    "service_version": "${API_SERVER_VERSION}",
-                    "service_instance_id": "${API_SERVER_INSTANCE_ID}"
+                    "service_name": "${SERVICE_NAME}",
+                    "service_version": "${VERSION}",
+                    "service_instance_id": "${INSTANCE_ID}"
                 }
             }
 
@@ -106,12 +106,12 @@
         }
     },
     "instrumentation": {
-        "service_name": "${API_SERVER_SERVICE_NAME}",
-        "service_version": "${API_SERVER_VERSION}",
-        "service_instance_id": "${API_SERVER_INSTANCE_ID}",
-        "enabled": "${API_SERVER_OTEL_ENABLED}",
+        "service_name": "${SERVICE_NAME}",
+        "service_version": "${VERSION}",
+        "service_instance_id": "${INSTANCE_ID}",
+        "enabled": "${OTEL_ENABLED}",
         "tracing": {
-            "enabled": "${API_SERVER_OTEL_TRACING_ENABLED}",
+            "enabled": "${OTEL_TRACING_ENABLED}",
             "span_processors": [
                 {
                     "class": "BatchSpanProcessor",
@@ -139,7 +139,7 @@
             ]
         }, 
         "metrics": {
-            "enabled": "${API_SERVER_OTEL_METRICS_ENABLED}",
+            "enabled": "${OTEL_METRICS_ENABLED}",
             "readers": [
                 {
                     "class": "PeriodicExportingMetricReader",

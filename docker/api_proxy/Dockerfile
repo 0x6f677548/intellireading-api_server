@@ -12,10 +12,6 @@ RUN rm /etc/nginx/conf.d/default.conf /etc/nginx/nginx.conf
 
 
 # ---- Copy the config files ----
-#!! config files should be mounted as a volume. !!
-# the following lines are only to ensure that the config files are present in the image 
-# so that the image can be run without mounting the config files 
-
 #nginx config file
 COPY ./docker/api_proxy/config/nginx.conf /etc/nginx/nginx.conf
 
