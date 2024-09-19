@@ -18,7 +18,7 @@ services:
       - TURNSTILE_ENABLED=true
       - TURNSTILE_SECRET_KEY=@@API_SERVER_TURNSTILE_SECRET_KEY@@
 
-      # used by api_server to enable/disable opentelemetry
+      # used by api_server to enable/disable opentelemetry metrics
       - OTEL_METRICS_ENABLED=true
 
 
