@@ -5,7 +5,7 @@ receivers:
   #  a single receiver should be used, taking advantage of facility
   syslog/nginx:
     udp:
-      listen_address: "0.0.0.0:514"
+      listen_address: "otel_collector:514"
     protocol: rfc3164
     operators:
       - type: json_parser
@@ -15,7 +15,7 @@ receivers:
         to: body
   syslog/nginx-error:
     udp:
-      listen_address: "0.0.0.0:50514"
+      listen_address: "otel_collector:50514"
     protocol: rfc3164
     operators:
       - type: regex_parser
@@ -51,14 +51,16 @@ receivers:
         value: unit
 
   fluentforward:
-    endpoint: 0.0.0.0:24224
+    endpoint: otel_collector:24224
 
 
     
   otlp:
     protocols:
       grpc:
+        endpoint: "otel_collector:4317"
       http:
+        endpoint: "otel_collector:4318"
   # The prometheus receiver scrapes metrics needed 
   # for the OpenTelemetry Collector Dashboard.
   prometheus:
@@ -67,7 +69,7 @@ receivers:
         - job_name: 'otelcol'
           scrape_interval: 10s
           static_configs:
-            - targets: ['0.0.0.0:8888']
+            - targets: ['otel_collector:8888']
 
 
 processors:
