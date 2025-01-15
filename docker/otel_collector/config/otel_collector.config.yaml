@@ -5,7 +5,7 @@ receivers:
   #  a single receiver should be used, taking advantage of facility
   syslog/nginx:
     udp:
-      listen_address: "0.0.0.0:514"
+      listen_address: "otel_collector:514"
     protocol: rfc3164
     operators:
       - type: json_parser
@@ -15,7 +15,7 @@ receivers:
         to: body
   syslog/nginx-error:
     udp:
-      listen_address: "0.0.0.0:50514"
+      listen_address: "otel_collector:50514"
     protocol: rfc3164
     operators:
       - type: regex_parser
@@ -31,44 +31,13 @@ receivers:
         field: attributes.service_name
         value: nginx.error      
   
-  filelog/unit-access:
-    include: [/var/log/api_server/unit-access.log]
-    operators:
-      - type: regex_parser
-        regex: '^(?P<remote_addr>[^ ]*) (?P<remote_user>[^ ]*) \[(?P<time_local>[^\]]*)\] (?P<host>[^ ]*) "(?P<request>[^"]*)" (?P<status>[^ ]*) (?P<body_bytes_sent>[^ ]*) "(?P<http_referer>[^"]*)" "(?P<http_user_agent>[^"]*)" "(?P<http_x_forwarded_for>[^"]*)"$'
-        timestamp:
-          parse_from: attributes.time_local
-          layout: '%d/%b/%Y:%H:%M:%S %z'
-
-      - type: copy
-        from: attributes.request
-        to: body
-      - type: add
-        field: attributes.service_name
-        value: unit.access.api.intellireading
-      - type: add
-        field: attributes.appname
-        value: unit
-
-  fluentforward:
-    endpoint: 0.0.0.0:24224
-
-
     
-  otlp:
+  otlp/receiver:
     protocols:
       grpc:
+        endpoint: "otel_collector:4317"
       http:
-  # The prometheus receiver scrapes metrics needed 
-  # for the OpenTelemetry Collector Dashboard.
-  prometheus:
-    config:
-      scrape_configs:
-        - job_name: 'otelcol'
-          scrape_interval: 10s
-          static_configs:
-            - targets: ['0.0.0.0:8888']
-
+        endpoint: "otel_collector:4318"
 
 processors:
   resource/env:
@@ -82,7 +51,7 @@ processors:
     timeout: 10s
 
 exporters:
-  otlp:
+  otlp/exporter:
     endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
     headers:
       api-key: ${OTEL_EXPORTER_OTLP_API_KEY}
@@ -94,14 +63,14 @@ exporters:
 service:
   pipelines:
     metrics:
-      receivers: [otlp]
+      receivers: [otlp/receiver]
       processors: [resource/env, batch]
-      exporters: [otlp]
+      exporters: [otlp/exporter]
     traces:
-      receivers: [otlp]
+      receivers: [otlp/receiver]
       processors: [resource/env, batch]
-      exporters: [otlp]
+      exporters: [otlp/exporter]
     logs:
-      receivers: [fluentforward, syslog/nginx-error, filelog/unit-access, syslog/nginx, otlp]
+      receivers: [syslog/nginx-error, syslog/nginx, otlp/receiver]
       processors: [resource/env, batch]
       exporters: [debug]

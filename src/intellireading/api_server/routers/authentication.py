@@ -52,6 +52,7 @@ def init_authentication(config):
     # api key management configuration
     _api_key_management_config = _authentication_config.get("api_key_management", {})
     _valid_api_keys = _api_key_management_config.get("valid_api_keys", _valid_api_keys)
+    _logger.info("Authentication module initialized")
 
 
 async def _validate_turnstile_token(
@@ -125,8 +126,9 @@ async def get_api_key(
 
     # TODO: hard coded api key for now. refactor to use a key management service # pylint: disable=fixme
     _authorized: bool = (
-        api_key_query_value in _valid_api_keys
-        or api_key_header_value in _valid_api_keys
+        (api_key_header_value is not None and api_key_header_value in _valid_api_keys)
+        or
+        (api_key_query_value is not None and api_key_query_value in _valid_api_keys)
     )
 
     if _authorized:

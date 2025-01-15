@@ -39,15 +39,14 @@ classifiers = [
 
 dependencies = [
   "Werkzeug>=3.0.4",
-  "fastapi>=0.112.2",
-  "uvicorn>=0.30.6",
   "python_multipart>=0.0.9",
-  "opentelemetry-api>=1.27.0",
-  "opentelemetry-sdk>=1.27.0",
-  "opentelemetry-instrumentation.fastapi>=0.48b0",
-  "opentelemetry-exporter-otlp>=1.27.0",
+  "fastapi>=0.115.6",
+  "uvicorn>=0.34.0",
+  "opentelemetry-distro>=0.50b0",
+  "opentelemetry-instrumentation-logging>=0.50b0",
+  "opentelemetry-instrumentation-fastapi>=0.50b0",
+  "opentelemetry-exporter-otlp>=1.29.0",
   "aiohttp>=3.10.5",
-  "fluent-logger>=0.11.1",
   "intellireading-cli>=2.0.0",
 ]
 [tool.hatch.metadata]
@@ -77,6 +76,7 @@ exclude = ["tests"]
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
+  #"intellireading-cli @ {root:parent:uri}/intellireading-cli",
 ]
 
 pre-install-commands = [
@@ -84,7 +84,7 @@ pre-install-commands = [
 ]
 
 [tool.hatch.envs.default.env-vars]
-VALID_API_KEY = "123"
+API_SERVER_API_KEY = "devapikey"
 
 [tool.hatch.envs.default.scripts]
 test = "pytest {args:tests} -v"
@@ -100,7 +100,7 @@ cov = [
 ]
 
 [[tool.hatch.envs.all.matrix]]
-python = ["3.7", "3.8", "3.9", "3.10", "3.11"]
+python = ["3.7", "3.8", "3.9", "3.10", "3.11", "3.12"]
 
 [tool.hatch.envs.lint]
 detached = true

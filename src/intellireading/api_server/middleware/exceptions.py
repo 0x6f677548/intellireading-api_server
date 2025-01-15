@@ -26,7 +26,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
             if self._logger.isEnabledFor(logging.DEBUG):
                 self._logger.debug(
                     f"ExceptionHandlerMiddleware: Request id {self._getrequest_id(request)}: "
-                    + f"Received request for {request.url}"
+                    f"Received request for {request.url}"
                 )
             return await call_next(request)
         except Exception as exc:  # pylint: disable=broad-except
@@ -35,7 +35,7 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
 
             self._logger.exception(
                 f"ExceptionHandlerMiddleware: Request id {self._getrequest_id(request)}: "
-                + f"Exception '{exc}' occurred while processing request for {request.url}"
+                f"Exception '{exc}' occurred while processing request for {request.url}"
             )
 
             return JSONResponse(

@@ -2,8 +2,7 @@
 services:
 
   #-------------------------------------------------------------------
-  # api_server is a nginx unit server that serves as a proxy for fastapi 
-  # in the same container
+  # api_server is a fastapi app 
   api_server: 
     ports:
       - 81:80
