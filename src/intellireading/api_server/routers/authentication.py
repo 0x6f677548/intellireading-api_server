@@ -9,10 +9,12 @@ from intellireading.api_server.monitoring.instrumentation import (
 from opentelemetry.trace import Tracer
 from opentelemetry import trace
 
+
 # ------------------ security ------------------
 _API_KEY_NAME = (
     "api-key"  # the name of the api key header(suffixed by x-) and query parameter
 )
+
 _turnstile_secret_key: str  # the secret key used to validate the captcha token
 _turnstile_enabled: bool = False  # whether or not to use the turnstile captcha
 # the turnstile validation endpoint
@@ -90,7 +92,7 @@ async def is_turnstile_valid(
     cf_connecting_ip=Header(alias="cf-connecting-ip", default=None),
 ) -> bool:
     _authorized = not _turnstile_enabled or await _validate_turnstile_token(
-        _turnstile_secret_key, cf_turnstile_response, cf_connecting_ip  # noqa: F821
+        _turnstile_secret_key, cf_turnstile_response, cf_connecting_ip
     )
     _logger.debug("Authorized by turnstile token: %s", _authorized)
 

@@ -19,7 +19,7 @@ def current_span_set_attribute(attribute_name: str, attribute_value: str):
 def current_span_add_warning_event(event_name: str, message: str):
     _span = trace.get_current_span()
     _if_span_valid(_span, lambda: _span.add_event(event_name, {"message": message}))
-    _if_span_valid(_span, lambda: _span.set_attribute("warning", True))
+    _if_span_valid(_span, lambda: _span.set_attribute("warning", "true"))
 
 
 def current_span_set_error(e: Exception):

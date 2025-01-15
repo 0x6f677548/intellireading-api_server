@@ -202,7 +202,7 @@ async def _process_file_request(request: Request, file: UploadFile, f):
 @router.post("/xhtml/transform")
 async def transform_xhtml(
     request: Request,
-    api_key: APIKey = Depends(get_api_key),  # pylint: disable=unused-argument
+    api_key: APIKey = Depends(get_api_key),  # noqa: ARG001
     file: UploadFile = Depends(_get_valid_xhtml),
 ):
     """
@@ -211,18 +211,17 @@ async def transform_xhtml(
     """
 
     # Open the uploaded xhtml file
-    # pylint: disable=unnecessary-lambda
     return await _process_file_request(
         request,
         file,
-        lambda input: metaguide_xhtml(input),
+        lambda xhtml_content: metaguide_xhtml(xhtml_content),
     )
 
 
 @router.post("/epub/transform")
 async def transform_epub(
     request: Request,
-    api_key: APIKey = Depends(get_api_key),  # pylint: disable=unused-argument
+    api_key: APIKey = Depends(get_api_key),  # noqa: ARG001
     file: UploadFile = Depends(_get_valid_epub),
 ):
     """
@@ -230,31 +229,29 @@ async def transform_epub(
     Requires a valid api key.
     """
 
-    # pylint: disable=unnecessary-lambda
     return await _process_file_request(
         request,
         file,
-        lambda input: metaguide_epub(input),
+        lambda epub_content: metaguide_epub(epub_content),
     )
 
 
-# pylint: disable=unused-argument
 @router.post("/epub/transform/submit")
 async def submit_epub(
     request: Request,
-    turstile_valid: bool = Depends(is_turnstile_valid),
     file: UploadFile = Depends(_get_valid_epub),
+    *,
+    turstile_valid: bool = Depends(is_turnstile_valid), # noqa: ARG001
 ):
     """
     Transforms an epub file into a metaguided epub file.
     Requires a valid turnstile.
     """
 
-    # pylint: disable=unnecessary-lambda
     return await _process_file_request(
         request,
         file,
-        lambda input: metaguide_epub(input),
+        lambda epub_input: metaguide_epub(epub_input),
     )
 
 
