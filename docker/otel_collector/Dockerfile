@@ -8,6 +8,8 @@ COPY ./docker/otel_collector/config/otel_collector.config.yaml /etc/otel_collect
 # user, but none for the group, so we're setting it here
 # using uid instead of user names since the base image is based on scratch
 # and we can't use tools like groupadd or useradd
+# this has been reported to the base image maintainers : 
+# https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/35179
 ARG USER_UID=10001
 ARG USER_GID=10001
 
@@ -22,5 +24,4 @@ ENV OTEL_EXPORTER_OTLP_INSECURE=true
 # represents a label to tag logging and tracing data with the environment name
 ENV TRACING_ENVIRONMENT=dev
 
-# we're binding to all interfaces, so we need to disable the UseLocalHostAsDefaultHost feature gate
-CMD ["--config", "/etc/otel_collector.config.yaml", "--feature-gates", "-component.UseLocalHostAsDefaultHost"]
+CMD ["--config", "/etc/otel_collector.config.yaml"]

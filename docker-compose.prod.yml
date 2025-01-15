@@ -2,25 +2,16 @@
 services:
 
   #-------------------------------------------------------------------
-  # api_server is a nginx unit server that serves as a proxy for fastapi in the 
-  # same container
+  # api_server is a fastapi app 
   api_server: 
     environment:
 
-      # used by api_server to identify itself on logs, otel, etc.
-      - VERSION=@@API_SERVER_VERSION@@
-      - INSTANCE_ID=prod-1
-
       # used by api_server to validate incoming requests
-      - API_KEY==@@API_SERVER_VALID_API_KEY@@
+      - API_SERVER_API_KEY==@@API_SERVER_API_KEY@@
       
       # used by api_server to enable/disable turnstile      
       - TURNSTILE_ENABLED=true
       - TURNSTILE_SECRET_KEY=@@API_SERVER_TURNSTILE_SECRET_KEY@@
-
-      # used by api_server to enable/disable opentelemetry metrics
-      - OTEL_METRICS_ENABLED=true
-
 
   #-------------------------------------------------------------------
   # otel_collector is a opentelemetry collector that receives traces 

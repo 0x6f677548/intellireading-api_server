@@ -24,8 +24,7 @@ services:
       - backend_network
 
   #-------------------------------------------------------------------
-  # api_server is a nginx unit server that serves as a proxy for fastapi in the 
-  # same container
+  # api_server is a fastapi app 
   api_server: 
     container_name: api_server
     image: api_server
@@ -33,10 +32,29 @@ services:
     build:
       context: .
       dockerfile: ./docker/api_server/Dockerfile
+    command:
+      - opentelemetry-instrument
+      - uvicorn
+      - intellireading.api_server.app:app
+      - --host
+      - api_server
+      - --port
+      - "80"
+
     depends_on:
       - otel_collector
-    volumes:
-      - ./.log/api_server:/var/log/unit
+    environment:
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+      - OTEL_PYTHON_LOG_CORRELATION = true
+      # - OTEL_PYTHON_LOG_LEVEL=DEBUG
+      - OTEL_SERVICE_NAME=server.api.intellireading
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=otlp
+      - OTEL_LOGS_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otel_collector:4317
+      - OTEL_EXPORTER_OTLP_METRICS_ENDPOINT=http://otel_collector:4317
+      - OTEL_EXPORTER_OTLP_LOGS_ENDPOINT=http://otel_collector:4317
+
     networks:
       - backend_network
 

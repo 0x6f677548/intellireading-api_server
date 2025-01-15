@@ -21,9 +21,9 @@ class LogCallMiddleware(BaseHTTPMiddleware):
             self._logger.log(
                 self.log_level,
                 f"Request id {self._getrequest_id(request)}: "
-                + f"Received request for '{request.url}' from '{request.client.host}' "
-                + f"with origin {request.headers.get('origin')} and "
-                + f"user agent {request.headers.get('user-agent')}",
+                f"Received request for '{request.url}' from '{request.client.host}' "
+                f"with origin {request.headers.get('origin')} and "
+                f"user agent {request.headers.get('user-agent')}",
             )
 
         _response = await call_next(request)
@@ -33,7 +33,7 @@ class LogCallMiddleware(BaseHTTPMiddleware):
             self._logger.log(
                 self.log_level,
                 f"Request id {self._getrequest_id(request)}: "
-                + f"Response status code {_response.status_code} for '{request.url}' "
-                + f"processed in {_duration} seconds",
+                f"Response status code {_response.status_code} for '{request.url}' "
+                f"processed in {_duration} seconds",
             )
         return _response

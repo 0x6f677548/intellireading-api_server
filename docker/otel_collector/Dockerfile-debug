@@ -20,8 +20,7 @@ COPY --from=otel_contrib_image /otelcol-contrib /otelcol-contrib
 EXPOSE 4317 55680 55679
 ENTRYPOINT ["/otelcol-contrib"]
 
-# we're binding to all interfaces, so we need to disable the UseLocalHostAsDefaultHost feature gate
-CMD ["--config", "/etc/otel_collector.config.yaml", "--feature-gates", "-component.UseLocalHostAsDefaultHost"]
+CMD ["--config", "/etc/otel_collector.config.yaml"]
 
 
 

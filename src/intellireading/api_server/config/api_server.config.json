@@ -6,7 +6,7 @@
         },
         "api_key_management" : {
             "valid_api_keys" : 
-                "${API_KEY}"
+                "${API_SERVER_API_KEY}"
             
         }
         
@@ -55,121 +55,16 @@
     "logging": {
         "version": 1,
         "disable_existing_loggers": false,
+        "incremental": true,
         "loggers": {
             "root": {
-                "level": "INFO",
-                "handlers": ["console", "fluentd"]
+                "level": "INFO"
             },
             "routers.metaguiding": {
                 "level": "INFO",
-                "handlers": ["console"],
                 "qualname": "routers.metaguiding",
                 "propagate": 0
             }
-        },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-                "level": "NOTSET",
-                "formatter": "console_formatter",
-                "stream": "ext://sys.stdout"
-            },
-            "fluentd": {
-                "class": "fluent.handler.FluentHandler",
-                "host": "otel_collector",
-                "port": 24224,
-                "level": "NOTSET",
-                "formatter": "fluentd_formatter",
-                "tag": "${SERVICE_NAME}"
-            }
-
-        },
-        "formatters": {
-            "console_formatter": {
-                "format": "%(asctime)s.%(msecs)03d %(name)-20s %(levelname)-8s %(message)s",
-                "datefmt": "%Y-%m-%d,%H:%M:%S"
-            },
-            "fluentd_formatter": {
-                "()" : "fluent.handler.FluentRecordFormatter",
-                "format": {
-                    "hostname": "%(hostname)s",
-                    "where": "%(module)s.%(funcName)s",
-                    "stack_trace": "%(exc_text)s",
-                    "level": "%(levelname)s",
-                    "service_name": "${SERVICE_NAME}",
-                    "service_version": "${VERSION}",
-                    "service_instance_id": "${INSTANCE_ID}"
-                }
-            }
-
-                
         }
-    },
-    "instrumentation": {
-        "service_name": "${SERVICE_NAME}",
-        "service_version": "${VERSION}",
-        "service_instance_id": "${INSTANCE_ID}",
-        "enabled": "${OTEL_ENABLED}",
-        "tracing": {
-            "enabled": "${OTEL_TRACING_ENABLED}",
-            "span_processors": [
-                {
-                    "class": "BatchSpanProcessor",
-                    "module": "opentelemetry.sdk.trace.export",
-                    "enabled": true,
-                    "kwargs": {
-                        "span_exporter": {
-                            "class": "OTLPSpanExporter",
-                            "module": "opentelemetry.exporter.otlp.proto.grpc.trace_exporter"
-                        }
-                    }
-                },
-                {
-                    "class": "SimpleSpanProcessor",
-                    "module": "opentelemetry.sdk.trace.export",
-                    "enabled": false,
-                    "kwargs": {
-                        "span_exporter": {
-                            "class": "ConsoleSpanExporter",
-                            "module": "opentelemetry.sdk.trace.export",
-                            "kwargs": {}
-                        }
-                    }
-                }
-            ]
-        }, 
-        "metrics": {
-            "enabled": "${OTEL_METRICS_ENABLED}",
-            "readers": [
-                {
-                    "class": "PeriodicExportingMetricReader",
-                    "module": "opentelemetry.sdk.metrics.export",
-                    "enabled": false,
-                    "kwargs": {
-                        "export_interval_millis": 60000,
-                        "export_timeout_millis": 10000,
-                        "exporter": {
-                            "class": "ConsoleMetricExporter",
-                            "module": "opentelemetry.sdk.metrics.export",
-                            "kwargs": {}
-                        }
-                    }
-                }, 
-                {
-                    "class": "PeriodicExportingMetricReader",
-                    "module": "opentelemetry.sdk.metrics.export",
-                    "enabled": true,
-                    "kwargs": {
-                        "export_interval_millis": 60000,
-                        "export_timeout_millis": 10000,
-                        "exporter": {
-                            "module": "opentelemetry.exporter.otlp.proto.grpc.metric_exporter",
-                            "class": "OTLPMetricExporter"
-                        }
-                    }
-                }
-            ]
-        }
-
     }
 }

@@ -36,8 +36,8 @@ class ConfigDict(dict):
             for _match in _matches:
                 self._logger.warning(
                     "Environment variable %s is not defined. It will not be replaced. "
-                    + "This may cause the application to not work as expected. "
-                    + "Falling back to default values if they are defined.",
+                    "This may cause the application to not work as expected. "
+                    "Falling back to default values if they are defined.",
                     _match,
                 )
 
