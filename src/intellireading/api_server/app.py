@@ -7,6 +7,7 @@ from intellireading.api_server.middleware.exceptions import ExceptionHandlerMidd
 from intellireading.api_server.middleware.logcall import LogCallMiddleware
 from intellireading.api_server.middleware.requestid import RequestIdMiddleware
 from intellireading.api_server.middleware.responsetime import ResponseTimeMiddleware
+from intellireading.api_server.middleware.opentelemetry import OtelSpanAttributesMiddleware
 from intellireading.api_server.monitoring.instrumentation import (
     current_span_set_error,
 )
@@ -47,33 +48,9 @@ else:
 _logger = logging.getLogger(__name__)
 _logger.info("Starting server")
 
-# TODO: como deixou de haver auto instrumentacao, temos que injetar isto de outra forma
-def _server_request_hook(span: Span, scope: dict):
-    """
-    This function is called by the FastAPI instrumentation when a request is received.
-    It is used to inject the request id into the span
-    This is important as we will auto instrument the application, and a span will already
-    be in-progress when the routers are called.
-    """
 
-    # TODO: this can be done dynamically by using config somehow # pylint: disable=fixme
-    # ex: what if we want to inject the user id into the span?
-    if span and span.is_recording():
-        # inject request_id into span
-        if "state" in scope:
-            state = scope["state"]
-            if "request_id" in state:
-                request_id = state["request_id"]
-                span.set_attribute("X-Request-ID", request_id)
 
-        # inject headers into span
-        headers_to_inject = ["x-forwarded-for", "x-real-ip", "origin"]
-        if scope["headers"]:
-            for header in scope["headers"]:
-                _header_name = header[0].decode("utf-8")
-                if _header_name in headers_to_inject:
-                    _header_value = header[1].decode("utf-8")
-                    span.set_attribute(_header_name, _header_value)
+
 
 
 init_authentication(_server_config)
@@ -83,6 +60,9 @@ app.include_router(metaguiding_router)
 
 # region adding middleware to the pipeline.
 # order is important: the first middleware added will be the last one to be executed
+
+# OpenTelemetry middleware
+app.add_middleware(OtelSpanAttributesMiddleware)
 
 # CORS configuration and middleware
 app.add_middleware(CORSMiddleware, config=_server_config)
@@ -98,6 +78,7 @@ app.add_middleware(RequestIdMiddleware, config=_server_config)
 
 # Exception handler middleware
 app.add_middleware(ExceptionHandlerMiddleware, config=_server_config)
+
 # endregion
 
 _logger.info("Server configured, routers and middleware added. Starting server...")
