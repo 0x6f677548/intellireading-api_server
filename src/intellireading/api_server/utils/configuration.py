@@ -22,11 +22,11 @@ class ConfigDict(dict):
     _logger = logging.getLogger(__name__)
 
     # pylint: disable=redefined-builtin
-    def __init__(self, dict, expand_env_vars=True):
+    def __init__(self, dictionary, *, expand_env_vars=True):
         if expand_env_vars:
-            super(ConfigDict, self).__init__(self._replace_env_vars(dict))
+            super().__init__(self._replace_env_vars(dictionary))
         else:
-            super(ConfigDict, self).__init__(dict)
+            super().__init__(dictionary)
 
     def _replace_env_vars(self, data):
         if isinstance(data, str):
@@ -47,7 +47,7 @@ class ConfigDict(dict):
         elif isinstance(data, dict):
             return ConfigDict(
                 {key: self._replace_env_vars(value) for key, value in data.items()},
-                False,
+                expand_env_vars=False,
             )
         elif isinstance(data, tuple):
             return tuple(self._replace_env_vars(item) for item in data)
@@ -91,6 +91,6 @@ class ConfigDict(dict):
         Creates a ConfigDict from a json file.
         """
         # pylint: disable=unspecified-encoding
-        with open(file_path, "r") as _f:
+        with open(file_path) as _f:
             _config_dict = json.load(_f)
         return cls(_config_dict)

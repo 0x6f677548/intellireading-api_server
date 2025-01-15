@@ -15,7 +15,6 @@ from intellireading.api_server.monitoring.logutils import (
     init_logging_from_file,
     init_logging_from_config,
 )
-from opentelemetry.trace import Span
 from intellireading.api_server.routers.authentication import init_authentication
 from intellireading.api_server.routers.metaguiding import router as metaguiding_router
 from intellireading.api_server.utils.configuration import ConfigDict
