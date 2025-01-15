@@ -18,9 +18,7 @@ class RequestIdMiddleware(BaseHTTPMiddleware):
         _request_id = str(uuid4())
         request.state.request_id = _request_id
         if self._logger.isEnabledFor(logging.DEBUG):
-            self._logger.debug(
-                "Request id %s: Received request for %s", _request_id, request.url
-            )
+            self._logger.debug("Request id %s: Received request for %s", _request_id, request.url)
 
         _response = await call_next(request)
         _response.headers[self.header] = _request_id

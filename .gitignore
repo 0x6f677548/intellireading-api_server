@@ -16,3 +16,4 @@ client/calibre/_releases/*
 .intellireading-backend.venv/*
 test/output.epub
 dist/*
+tests/test_files/output.epub

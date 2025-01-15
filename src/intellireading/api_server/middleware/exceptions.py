@@ -40,7 +40,5 @@ class ExceptionHandlerMiddleware(BaseHTTPMiddleware):
 
             return JSONResponse(
                 status_code=500,
-                content={
-                    "message": "Internal server error. If the problem persists, please contact the administrator"
-                },
+                content={"message": "Internal server error. If the problem persists, please contact the administrator"},
             )

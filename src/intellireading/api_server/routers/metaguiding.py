@@ -76,10 +76,7 @@ def _validate_content_type_and_extension(
                 "the operation you are calling. "
             ),
         )
-    if (
-        "." not in _filename
-        or _filename.rsplit(".", 1)[1].lower() not in valid_extensions
-    ):
+    if "." not in _filename or _filename.rsplit(".", 1)[1].lower() not in valid_extensions:
         _raise_http_exception(
             status_code=status.HTTP_400_BAD_REQUEST,
             message=f"File {_filename} has invalid extension. Valid extensions: {valid_extensions}",
@@ -157,12 +154,8 @@ async def _process_file_request(request: Request, file: UploadFile, f):
         _content_type = file.content_type or ""
 
         # add metrics
-        _files_transformed_counter.add(
-            1, {"request_path": _request_path, "filename": _filename}
-        )
-        _files_size_counter.add(
-            _filesize, {"request_path": _request_path, "filename": _filename}
-        )
+        _files_transformed_counter.add(1, {"request_path": _request_path, "filename": _filename})
+        _files_size_counter.add(_filesize, {"request_path": _request_path, "filename": _filename})
 
         _logger.debug(
             "Request id %s: Processing file %s with function %s",
@@ -170,9 +163,7 @@ async def _process_file_request(request: Request, file: UploadFile, f):
             _filename,
             f.__name__,
         )
-        with _tracer.start_as_current_span(
-            "processing file", set_status_on_exception=False, record_exception=False
-        ):
+        with _tracer.start_as_current_span("processing file", set_status_on_exception=False, record_exception=False):
             _output_stream: BytesIO = f(file.file)
 
         with _tracer.start_as_current_span("sending file"):
@@ -198,6 +189,7 @@ async def _process_file_request(request: Request, file: UploadFile, f):
 # endregion
 
 # region --------------------- ROUTES --------------------------------
+
 
 @router.post("/xhtml/transform")
 async def transform_xhtml(
@@ -241,7 +233,7 @@ async def submit_epub(
     request: Request,
     file: UploadFile = Depends(_get_valid_epub),
     *,
-    turstile_valid: bool = Depends(is_turnstile_valid), # noqa: ARG001
+    turstile_valid: bool = Depends(is_turnstile_valid),  # noqa: ARG001
 ):
     """
     Transforms an epub file into a metaguided epub file.

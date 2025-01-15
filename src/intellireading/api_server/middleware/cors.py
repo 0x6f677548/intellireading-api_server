@@ -26,9 +26,7 @@ class CORSMiddleware(fastapi_CORSMiddleware):
             config = {}
 
         _middleware_section_configuration = config.get("middleware", {})
-        self.middleware_config = _middleware_section_configuration.get(
-            self.middleware_name, {}
-        )
+        self.middleware_config = _middleware_section_configuration.get(self.middleware_name, {})
 
         if self.middleware_config:
             self._logger.info(

@@ -26,9 +26,7 @@ class BaseHTTPMiddleware(starlette_BaseHTTPMiddleware):
         if config is None:
             config = {}
         _middleware_section_configuration = config.get("middleware", {})
-        self.middleware_config = _middleware_section_configuration.get(
-            self.middleware_name, {}
-        )
+        self.middleware_config = _middleware_section_configuration.get(self.middleware_name, {})
 
         self.middleware_enabled = self.middleware_config.get("enabled", True)
 

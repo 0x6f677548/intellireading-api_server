@@ -40,4 +40,3 @@ def init_logging_from_config(config: dict, section: str = "logging"):
     else:
         _logging_settings = config[section]
         logging.config.dictConfig(_logging_settings)
-

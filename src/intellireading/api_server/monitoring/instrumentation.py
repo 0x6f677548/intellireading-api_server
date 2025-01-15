@@ -5,6 +5,7 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+
 # region span helpers
 def _if_span_valid(span, f):
     if span is not None and span is not trace.INVALID_SPAN:

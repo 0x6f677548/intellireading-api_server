@@ -1,6 +1,7 @@
 from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware as BaseOpenTelemetryMiddleware
 from opentelemetry.trace import Span
 
+
 class OtelSpanAttributesMiddleware(BaseOpenTelemetryMiddleware):
 
     def _server_request_hook(self, span: Span, scope: dict):
@@ -32,4 +33,3 @@ class OtelSpanAttributesMiddleware(BaseOpenTelemetryMiddleware):
 
     def __init__(self, app):
         super().__init__(app, server_request_hook=self._server_request_hook)
-
