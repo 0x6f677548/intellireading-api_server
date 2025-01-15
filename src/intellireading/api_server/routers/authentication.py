@@ -10,56 +10,52 @@ from opentelemetry.trace import Tracer
 from opentelemetry import trace
 
 
-# ------------------ security ------------------
-_API_KEY_NAME = (
-    "api-key"  # the name of the api key header(suffixed by x-) and query parameter
-)
-
-_turnstile_secret_key: str  # the secret key used to validate the captcha token
-_turnstile_enabled: bool = False  # whether or not to use the turnstile captcha
-# the turnstile validation endpoint
-_turnstile_siteverify_url: str = (
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify"
-)
-_valid_api_keys: list[str] = []  # the list of valid api keys
-
-# the name of query parameter to use for the api key
-api_key_query = APIKeyQuery(name=_API_KEY_NAME, auto_error=False)
-# the name of the header to use for the api key
-api_key_header = APIKeyHeader(name=f"x-{_API_KEY_NAME}", auto_error=False)
-
-# Get the logger for this module
 _logger: logging.Logger = logging.getLogger(__name__)
+
+
+class AuthConfig:
+    _API_KEY_NAME = "api-key"  # the name of the api key header(suffixed by x-) and query parameter
+
+    _turnstile_secret_key: str  # the secret key used to validate the captcha token
+    _turnstile_enabled: bool = False  # whether or not to use the turnstile captcha
+    # the turnstile validation endpoint
+    _turnstile_siteverify_url: str = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
+    _valid_api_keys: list[str]  # the list of valid api keys
+
+    # the name of query parameter to use for the api key
+    _api_key_query = APIKeyQuery(name=_API_KEY_NAME, auto_error=False)
+    # the name of the header to use for the api key
+    _api_key_header = APIKeyHeader(name=f"x-{_API_KEY_NAME}", auto_error=False)
+
+    def init_from_config(self, config):
+        """
+        This function is used to initialize the authentication module.
+        It will read the configuration and set the global variables accordingly.
+        """
+        self._authentication_config = config.get("authentication", {}) if config else {}
+        _logger.info("Configuration for authentication: %s", self._authentication_config)
+        # turstile configuration
+        _turnstile_config = self._authentication_config.get("turnstile", {})
+        self._turnstile_enabled = _turnstile_config.get("enabled", self._turnstile_enabled)
+        self._turnstile_secret_key = _turnstile_config.get("secret_key", None)
+        self._turnstile_siteverify_url = _turnstile_config.get("siteverify_url", self._turnstile_siteverify_url)
+
+        # api key management configuration
+        _api_key_management_config = self._authentication_config.get("api_key_management", {})
+        self._valid_api_keys = _api_key_management_config.get("valid_api_keys", [])
+        _logger.info("Authentication configuration initialized")
+
+
+authconfig = AuthConfig()
+
+
+# ------------------ security ------------------
+
 # Creates a tracer from the global tracer provider
 _tracer: Tracer = trace.get_tracer(__name__)
 
 
-def init_authentication(config):
-    """
-    This function is used to initialize the authentication module.
-    It will read the configuration and set the global variables accordingly.
-    """
-    # pylint: disable=global-statement
-    global _turnstile_secret_key, _turnstile_enabled, _valid_api_keys, _turnstile_siteverify_url
-    _authentication_config = config.get("authentication", {}) if config else {}
-    _logger.info("Configuration for authentication: %s", _authentication_config)
-    # turstile configuration
-    _turnstile_config = _authentication_config.get("turnstile", {})
-    _turnstile_enabled = _turnstile_config.get("enabled", _turnstile_enabled)
-    _turnstile_secret_key = _turnstile_config.get("secret_key", None)
-    _turnstile_siteverify_url = _turnstile_config.get(
-        "siteverify_url", _turnstile_siteverify_url
-    )
-
-    # api key management configuration
-    _api_key_management_config = _authentication_config.get("api_key_management", {})
-    _valid_api_keys = _api_key_management_config.get("valid_api_keys", _valid_api_keys)
-    _logger.info("Authentication module initialized")
-
-
-async def _validate_turnstile_token(
-    secret_key, token: str | None = None, ip: str | None = None
-) -> bool:
+async def _validate_turnstile_token(secret_key, token: str | None = None, ip: str | None = None) -> bool:
     with _tracer.start_as_current_span("_validate_turnstile_token"):
         if not token:
             return False
@@ -72,17 +68,13 @@ async def _validate_turnstile_token(
             form_data.add_field("remoteip", ip)
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(
-                _turnstile_siteverify_url, data=form_data
-            ) as response:
+            async with session.post(authconfig._turnstile_siteverify_url, data=form_data) as response:
                 outcome = await response.json()
                 _success = outcome.get("success")
                 if not _success:
                     # cloudflare returns a list of error codes.
                     # keep them as a list in the span for troubleshooting
-                    current_span_set_attribute(
-                        "error-codes", outcome.get("error-codes", [])
-                    )
+                    current_span_set_attribute("error-codes", outcome.get("error-codes", []))
 
                 return outcome.get("success")
 
@@ -91,8 +83,8 @@ async def is_turnstile_valid(
     cf_turnstile_response=Form(alias="cf-turnstile-response", default=None),
     cf_connecting_ip=Header(alias="cf-connecting-ip", default=None),
 ) -> bool:
-    _authorized = not _turnstile_enabled or await _validate_turnstile_token(
-        _turnstile_secret_key, cf_turnstile_response, cf_connecting_ip
+    _authorized = not authconfig._turnstile_enabled or await _validate_turnstile_token(
+        authconfig._turnstile_secret_key, cf_turnstile_response, cf_connecting_ip
     )
     _logger.debug("Authorized by turnstile token: %s", _authorized)
 
@@ -114,8 +106,8 @@ async def is_turnstile_valid(
 
 
 async def get_api_key(
-    api_key_query_value: str = Security(api_key_query),
-    api_key_header_value: str = Security(api_key_header),
+    api_key_query_value: str = Security(authconfig._api_key_query),
+    api_key_header_value: str = Security(authconfig._api_key_header),
 ):
     """
     This function is used to get the api key from the request.
@@ -127,10 +119,8 @@ async def get_api_key(
     """
 
     # TODO: hard coded api key for now. refactor to use a key management service # pylint: disable=fixme
-    _authorized: bool = (
-        (api_key_header_value is not None and api_key_header_value in _valid_api_keys)
-        or
-        (api_key_query_value is not None and api_key_query_value in _valid_api_keys)
+    _authorized: bool = (api_key_header_value is not None and api_key_header_value in authconfig._valid_api_keys) or (
+        api_key_query_value is not None and api_key_query_value in authconfig._valid_api_keys
     )
 
     if _authorized:
@@ -139,7 +129,7 @@ async def get_api_key(
         # request.state.api_key = api_key_query if api_key_query else api_key_header
 
         # add the api key to the current span
-        current_span_set_attribute(_API_KEY_NAME, _api_key)
+        current_span_set_attribute(authconfig._API_KEY_NAME, _api_key)
 
         return _api_key
     else:

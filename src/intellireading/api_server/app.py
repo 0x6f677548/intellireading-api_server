@@ -15,7 +15,7 @@ from intellireading.api_server.monitoring.logutils import (
     init_logging_from_file,
     init_logging_from_config,
 )
-from intellireading.api_server.routers.authentication import init_authentication
+from intellireading.api_server.routers.authentication import authconfig
 from intellireading.api_server.routers.metaguiding import router as metaguiding_router
 from intellireading.api_server.utils.configuration import ConfigDict
 
@@ -36,7 +36,6 @@ def _load_server_config() -> ConfigDict:
     return server_config
 
 
-
 _server_config = _load_server_config()
 if "logging" in _server_config:
     init_logging_from_config(_server_config, "logging")
@@ -48,11 +47,7 @@ _logger = logging.getLogger(__name__)
 _logger.info("Starting server")
 
 
-
-
-
-
-init_authentication(_server_config)
+authconfig.init_from_config(_server_config)
 app: FastAPI = FastAPI()
 app.include_router(metaguiding_router)
 
@@ -82,6 +77,7 @@ app.add_middleware(ExceptionHandlerMiddleware, config=_server_config)
 
 _logger.info("Server configured, routers and middleware added. Starting server...")
 
+
 @app.exception_handler(Exception)
 async def exception_callback(request: Request, exc: Exception):
     """
@@ -96,9 +92,7 @@ async def exception_callback(request: Request, exc: Exception):
     handler of FastAPI (which is the same as this one)
     """
     # try to get the request id from the request state
-    request_id = (
-        request.state.request_id if hasattr(request.state, "request_id") else None
-    )
+    request_id = request.state.request_id if hasattr(request.state, "request_id") else None
     _logger.exception(
         "Request id %s: Critical exception '%s' \
                       occurred while processing request for %s",
