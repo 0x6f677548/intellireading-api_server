@@ -1,11 +1,12 @@
-# Intellireading backend
+![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/intellireading.png)
+# Backend servers
 
 [![PyPI - Version](https://img.shields.io/pypi/v/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
 [![GitHub - Lint](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml)
 [![GitHub - Test](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml)
 
-Intellireading backend represents a server that exposes the Intellireading Library through FastAPI and that is the backend of the [Intellireading website](https://intellireading.com/).
+Intellireading backend represents a server composed by a couple of containers that exposes the Intellireading Library through FastAPI, NGINX and that is the backend of the [Intellireading website](https://intellireading.com/).
 
 If you are looking to metaguide an EPUB file, you may visit the [Intellireading website](https://intellireading.com/) and upload your file there or, alternatively, you can use the Intellireading CLI, which is a command-line tool that is part of the Intellireading library.
 
