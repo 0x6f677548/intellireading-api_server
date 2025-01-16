@@ -1,14 +1,23 @@
-# intellireading
+# Intellireading backend
 
-## Lint Status
-[![GitHub Super-Linter all codebase](https://github.com/0x6f677548/intellireading/actions/workflows/lint-super-linter-all-codebase.yml/badge.svg)](https://github.com/0x6f677548/intellireading/actions/workflows/lint-super-linter-all-codebase.yml)
-[![GitHub Super-Linter](https://github.com/0x6f677548/intellireading/actions/workflows/lint-super-linter.yml/badge.svg)](https://github.com/0x6f677548/intellireading/actions/workflows/lint-super-linter.yml)
+[![PyPI - Version](https://img.shields.io/pypi/v/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
+[![GitHub - Lint](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml)
+[![GitHub - Test](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml)
 
-## Deploy Status
-[![Deploy to GCP](https://github.com/0x6f677548/intellireading/actions/workflows/deploy-server.yml/badge.svg)](https://github.com/0x6f677548/intellireading/actions/workflows/deploy-server.yml)
-[![Deploy to Clouflare](https://github.com/0x6f677548/intellireading/actions/workflows/deploy-www.yml/badge.svg)](https://github.com/0x6f677548/intellireading/actions/workflows/deploy-www.yml)
-[![Deploy to ghcr.io](https://github.com/0x6f677548/intellireading/actions/workflows/build-containers.yml/badge.svg)](https://github.com/0x6f677548/intellireading/actions/workflows/build-containers.yml)
+Intellireading backend represents a server that exposes the Intellireading Library through FastAPI and that is the backend of the [Intellireading website](https://intellireading.com/).
 
+If you are looking to metaguide an EPUB file, you may visit the [Intellireading website](https://intellireading.com/) and upload your file there or, alternatively, you can use the Intellireading CLI, which is a command-line tool that is part of the Intellireading library.
+
+If you want to know more about the Intellireading Library, please visit the [Intellireading Library repository](https://github.com/0x6f677548/intellireading-cli).
+
+
+## What is Epub Metaguiding?
+**Metagu**iding **i**s **a** **techn**ique **th**at **ca**n **b**e **us**ed **t**o **impr**ove **yo**ur **read**ing **foc**us **an**d **spe**ed **(some**times **cal**led **Bio**nic **Readi**ng). **I**t **i**s **bas**ed **o**n **th**e **id**ea **th**at **yo**u **ca**n **us**e **a** **vis**ual **gui**de **t**o **he**lp **yo**ur **ey**es **foc**us **o**n **th**e **te**xt **yo**u **ar**e **read**ing. **I**n **th**is **cas**e, **th**e **vis**ual **gui**de **i**s **do**ne **b**y **bold**ing **a** **pa**rt **o**f **th**e **tex**t, **crea**ting **vis**ual **anch**ors **th**at **yo**ur **ey**es **ca**n **us**e **t**o **foc**us **o**n **th**e **tex**t. **Th**is **i**s **simi**lar **t**o **th**e **wa**y **a** **fin**ger **ca**n **b**e **us**ed **t**o **gui**de **yo**ur **ey**es **alo**ng **a** **li**ne **o**f **tex**t, **whi**ch **ha**s **be**en **sho**wn **t**o **impr**ove **read**ing **spe**ed **an**d **foc**us. ([**stu**dy: **"Do**es **finger-t**racking **poi**nt **t**o **chi**ld **read**ing **strate**gies"](https://ceur-ws.org/Vol-2769/paper_60.pdf))
+
+**Howe**ver, **unl**ike **a** **fing**er, **th**e **vis**ual **gui**de **i**s **no**t **distra**cting, **an**d **i**t **ca**n **b**e **us**ed **t**o **gui**de **yo**ur **ey**es **alo**ng **mult**iple **lin**es **o**f **te**xt **a**t **onc**e. **Th**is **all**ows **yo**u **t**o **re**ad **fast**er, **an**d **wi**th **le**ss **effo**rt.
+
+**Metagu**iding **i**s **partic**ulary **use**ful **fo**r **peo**ple **wi**th **dysl**exia **o**r **ADH**D, **bu**t **i**t **ca**n **b**e **us**ed **b**y **any**one **wh**o **wan**ts **t**o **impr**ove **the**ir **read**ing **foc**us **an**d **spe**ed. **Fo**r **mo**re **inform**ation, **vis**it **th**e [**Intelli**reading **webs**ite.](https://intellireading.com/)
 
 
 ## Developing - build and run
@@ -44,89 +53,16 @@ attaching to the shell of a running client image
 running a new client image and attaching to its shell
 `docker run --rm -it client`
 
-### activate environment
-`source ~/intellireading/.virtualenv/bin/activate`
-
-### run the api_server locally using uvicorn
-`uvicorn main:app --reload --lifespan on`
-
-### run the api_server locally using uvicorn and loading env variables from .env
-`uvicorn main:app --reload --lifespan on --env-file ../../.env`
-
 
 ### testing
 
-#### Calling the api_server from client
-Using a  fully local hosted env:
-(make sure you are in the client/cli directory)
-`python call-metaguide_epub.py ../../test/test_data/input/400files.epub ../../test/test_data/output/test.epub http://localhost:80/metaguiding/epub/transform`
+#### Calling the api_server using curl (from the test directory)
 
-using the client docker image (api_proxy)
-`python call-metaguide_epub.py ../../test/test_data/input/400files.epub ../../test/test_data/output/test.epub http://api_proxy/metaguiding/epub/transform`
-
-#### metaguiding an individual file
-(client directory)
-`python metaguide_epub.py ../../test/test_data/input/400files.epub ../../test/test_data/output/test.epub`
-
-using curl:
-(store the output in a file - execute from the test directory)
-`curl -X POST http://localhost:80/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o test_data/output/test.epub -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r"`
-
-`curl -X POST http://localhost:80/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -H "X-API-KEY: myapikey" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o test_data/output/test.epub -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r"`
-
-
-
-(don't store the output)
-`curl -X POST http://localhost:80/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o /dev/null -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r"`
+`curl -X POST http://localhost:81/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -H "X-API-KEY: 123" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o test_data/output/test.epub -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r"`
 
 (using api-key in the query string)
 `curl -X POST http://localhost:80/metaguiding/epub/transform?api-key=myapikey -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o /dev/null -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r`
 
-(using api-key in the header)
-`curl -X POST http://localhost:80/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -H "X-API-KEY: myapikey" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o /dev/null -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r`
-
-
-#### metaguiding all epub files in a directory
-(client directory)
-`python metaguide_epub_dir.py ../../test/test_data/input/`
-
-
-
-## deploy
-### all services in the same host
-.env.prod should be updated
-`docker compose --env-file .env.prod up -d`
-
-
-### service by service deploy
-(replace "api_server" by the desired service to deploy)
-
-rebuild the images
-`docker compose --env-file .env.prod build api_server`
-deploy and run the container without dependencies
-`docker compose --env-file .env.prod up --no-deps -d api_server`
-
-### generate deploy folder
-(not deleting files that are not in the source folder)
-`rsync -av --exclude-from=rsync-exclusions ./ /mnt/c/temp/intellireading`
-(deleting files that are not in the source folder)
-`rsync -av --delete --exclude-from=rsync-exclusions ./ /mnt/c/temp/intellireading`
-
-(create a ZIP file from the deploy folder named "intellireading.ZIP", but not including the deploy folder itself)
-`zip -r /mnt/c/temp/intellireading.zip /mnt/c/temp/intellireading`
-
-### how to create a server release and deploy it
-
-1) update API_SERVER_VERSION in .env and .env.prod
-2) run the script to create the server release
-`./create-server-release.sh` . This will create a ZIP file named "intellireading-server-<version>.ZIP" in the "releases\<version>" folder
-3) copy the ZIP file to the server
-4) stop all running containers with `docker compose --env-file .env.prod down`
-5) rename the intellireading folder to intellireading.old
-6) unzip the new release file to a new intellireading folder executing `unzip intellireading-server-<version>.zip -d intellireading`
-7) copy the .env.prod file from the old intellireading folder to the new intellireading folder. Verify that .env.prod has the correct values for the new release, namely the correct version number
-8) move all logs from the old intellireading folder to the new intellireading folder, using the same folder structure
-9) start the containers with `docker compose --env-file .env.prod up -d`
 
 ## troubleshooting
 ### docker
@@ -143,17 +79,6 @@ sudo goaccess .log/api_proxy/api.intelireading.com.nginx-access.log --log-format
 #### general nginx access log
 sudo goaccess .log/api_proxy/nginx-access.log --log-format='%h %e %^[%d:%t %^] %v "%r" %s %b "%R" "%u" %^' --date-format='%d/%b/%Y' --time-format='%H:%M:%S'
 
-### view logs
-Logs are sent to otel_collector, that should fwd to new-relic.
-
-### connecting to the host server
-`ssh user@server -i ~/.ssh/private_key_file`
-where:
-- user is the username
-- server is the server name or ip address
-- private_key_file is the private key file
-
- If the server is hosted in GCP, make sure the public key is added to the project metadata and mapped to the username
 
 ### mapping a local folder to a remote folder on the server
  Ensure you have a config file in ~/.ssh/config with the following content:
