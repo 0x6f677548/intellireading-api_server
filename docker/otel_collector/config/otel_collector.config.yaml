@@ -73,4 +73,4 @@ service:
     logs:
       receivers: [syslog/nginx-error, syslog/nginx, otlp/receiver]
       processors: [resource/env, batch]
-      exporters: [debug]
+      exporters: [debug, otlp/exporter]
