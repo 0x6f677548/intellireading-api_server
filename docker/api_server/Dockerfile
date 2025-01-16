@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS builder
+FROM python:3-slim AS builder
 
 RUN mkdir /app
 WORKDIR /app
@@ -12,7 +12,7 @@ RUN hatch build
 
 
 
-FROM python:3.12-slim
+FROM python:3-slim
 
 RUN mkdir /app
 WORKDIR /app
