@@ -11,8 +11,13 @@ jobs:
   clear-cache:
     runs-on: ubuntu-latest
     steps:
+      - name: Echo current date and time
+        id: datetime
+        run: |
+          echo "datetime: $(date '+%Y-%m-%d %H:%M:%S')"
+
       - name: Clear cache
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             console.log("About to clear")

@@ -24,7 +24,7 @@ jobs:
       - name: Display date/time in output (forensics when triaging issues)
         run: echo ${{ steps.datetime.outputs.datetime }}
 
-      - uses: actions/checkout@v3.6.0
+      - uses: actions/checkout@v4
         with:
           # This captures the branch/tag reference of the event
           ref: ${{ github.ref }}  
@@ -49,7 +49,7 @@ jobs:
           fi
           echo "version=$version_without_prefix" >> "$GITHUB_OUTPUT"
 
-      - uses: easingthemes/ssh-deploy@v4.1.8
+      - uses: easingthemes/ssh-deploy@v5.1.0
         name: ssh deploy
         with:
           SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
@@ -64,8 +64,8 @@ jobs:
             docker compose --env-file .env.prod down
           SCRIPT_AFTER: |
             cd intellireading
-            sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' .env.prod
-            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ vars.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' .env.prod
-            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' .env.prod
-            sed -i -e "s,@@API_SERVER_VERSION@@,${{ steps.get-version.outputs.version }},g" .env.prod
+            sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' docker-compose.prod.yml
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ vars.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' docker-compose.prod.yml
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' docker-compose.prod.yml
+            sed -i -e 's,@@API_SERVER_API_KEY@@,${{ secrets.API_SERVER_API_KEY}},g' docker-compose.prod.yml
             docker compose --env-file .env.prod up -d --remove-orphans --build
