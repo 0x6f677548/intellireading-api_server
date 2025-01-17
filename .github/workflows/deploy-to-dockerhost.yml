@@ -30,25 +30,6 @@ jobs:
           # This captures the branch/tag reference of the event
           ref: ${{ github.ref }}  
 
-      - name: Get version
-        id: get-version
-        run: |
-          reference="${{ github.ref }}"
-
-          # check if we have a valid reference. 
-          # It should be a branch or a tag. Parse the version from the tag.
-          if [[ "$reference" == refs/tags/v* ]]; then
-            version_without_prefix="${reference#refs/tags/v}"
-          elif [[ "$reference" == refs/heads/release/v* ]]; then
-            version_without_prefix="${reference#refs/heads/release/v}"
-          else
-            echo "Invalid reference: $reference."
-            echo "This action only works on branches or tags starting with 'v'."
-            echo "If you are using a branch, please use a release branch"
-            echo " starting with 'release/v'."
-            exit 1
-          fi
-          echo "version=$version_without_prefix" >> "$GITHUB_OUTPUT"
 
       - uses: easingthemes/ssh-deploy@v5.1.0
         name: ssh deploy
