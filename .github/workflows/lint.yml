@@ -21,7 +21,7 @@ run-name: ${{ github.ref_name }} -> lint (
 jobs:
   lint:
 
-    name: Lints the code using specified linters
+    name: lint
     runs-on: ubuntu-latest
 
     steps:

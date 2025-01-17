@@ -19,9 +19,9 @@ run-name: ${{ github.ref_name }} -> test (
 
 
 jobs:
-  lint:
+  test:
 
-    name: Runs unit tests
+    name: test
     runs-on: ubuntu-latest
 
     steps:

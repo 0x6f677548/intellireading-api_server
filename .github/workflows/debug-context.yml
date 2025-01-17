@@ -11,9 +11,9 @@ run-name: ${{ github.ref_name }} -> debug_context (
     
 jobs:
 
-  debug:
+  debug_context:
     
-    name: Debug
+    name: debug_context
     runs-on: ubuntu-latest
     steps:
       - name: Echo current date and time

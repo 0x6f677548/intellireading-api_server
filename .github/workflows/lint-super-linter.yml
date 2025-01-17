@@ -1,5 +1,5 @@
 ---
-name: lint->super_linter
+name: super_linter
 
 on:
   release:
@@ -14,16 +14,16 @@ on:
     - cron: '0 0 * * 1'
     
 # set the run-name 
-run-name: ${{ github.ref_name }} -> lint->super_linter (
+run-name: ${{ github.ref_name }} -> super_linter (
   ${{ github.run_attempt }}
   )
 
 permissions: read-all
 
 jobs:
-  build:
+  super_linter:
 
-    name: Lint code base part of the event
+    name: super_linter
     runs-on: ubuntu-latest
 
     ############################################
