@@ -1,12 +1,12 @@
 ---
-name: Build -> artifacts (wheel, tar.gz)
+name: build->artifacts
 # yamllint disable-line rule:line-length
 
 on:
   workflow_dispatch:
 
 # set the run-name 
-run-name: ${{ github.ref_name }} -> Build Artifacts (
+run-name: ${{ github.ref_name }} -> build->artifacts (
   ${{ github.run_attempt }}
   )
 

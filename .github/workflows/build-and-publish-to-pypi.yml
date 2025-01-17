@@ -1,5 +1,5 @@
 ---
-name: Release->Build and Publish to PyPi
+name: release->build_and_pub_to_pypi
 # yamllint disable rule:line-length
 
 on:

@@ -1,5 +1,5 @@
 ---
-name: Maintenance-> Clear github actions cache
+name: maintenance->clear_actions_cache
 
 on:
   workflow_dispatch:
