@@ -22,6 +22,8 @@ RUN pip install --no-cache --upgrade pip
 
 # copy and install any dependencies that are required by the application and were provided as whl files
 # this may include dependencies that are not available in the public pypi repository (if any)
+# this is useful because the api_server might be using a private package that is 
+# yet to be published to the public pypi repository
 COPY  ./.dependencies /app/.dependencies
 RUN pip install --no-cache-dir /app/.dependencies/*.whl
 
