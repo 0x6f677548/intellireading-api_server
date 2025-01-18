@@ -1,8 +1,6 @@
 ![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/intellireading.png)
 # Backend servers
 
-[![PyPI - Version](https://img.shields.io/pypi/v/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intellireading-backend.svg)](https://pypi.org/project/intellireading-backend)
 [![Deploy to GHCR](https://github.com/0x6f677548/intellireading-backend/actions/workflows/build-and-publish-to-ghcr.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/build-and-publish-to-ghcr.yml)
 [![Deploy](https://github.com/0x6f677548/intellireading-backend/actions/workflows/deploy-to-dockerhost.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/deploy-to-dockerhost.yml)
 [![GitHub - Lint](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml)
