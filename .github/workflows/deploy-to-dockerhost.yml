@@ -27,24 +27,58 @@ jobs:
 
       - uses: actions/checkout@v4
       
-      - name: Tailscale
+      - name: Check execution environment
+        id: check_env
+        run: |
+          if [ "$ACT" = "true" ]; then
+            echo "is_act=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_act=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Tailscale on ACT
+        if: steps.check_env.outputs.is_act == 'true'
+        uses: pikachews/tailscale-action@v1
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Tailscale on other environments (like github)
+        if: steps.check_env.outputs.is_act != 'true'
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:ci
 
-
-      - name: ssh deploy
+      - name: create dir and stop and remove containers through ssh
         run: |
           ssh -o "StrictHostKeyChecking no" ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "
-           mkdir -p /apps/${{ github.event.repository.name }} &&
-            cd /apps/${{ github.event.repository.name }} &&
-            [ -f docker-compose.prod.yml ] && docker compose --env-file .env.prod down &&
-            rsync -avzi --delete --exclude=log/ --exclude-from=.deploy/rsync-exclusions ${{ github.workspace }}/ ./
+            mkdir -p /apps/intellireading-backend &&
+            cd /apps/intellireading-backend &&
+            echo 'Stopping and removing containers...' &&
+            [ -f docker-compose.prod.yml ] && docker compose --env-file .env.prod down --remove-orphans || exit 0
+          "
+      
+
+      - name: rsync files to docker host through ssh
+        run: |
+          # Install rsync if not already installed
+          if ! command -v rsync &> /dev/null; then
+            DEBIAN_FRONTEND=noninteractive apt-get update -y &&
+            DEBIAN_FRONTEND=noninteractive apt-get install rsync -y
+          fi &&
+          rsync -avzi -e "ssh -o StrictHostKeyChecking=no" --delete --exclude-from=.deploy/rsync-exclusions ${{ github.workspace }}/ ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }}:/apps/intellireading-backend/ 
+          
+      - name: add secrets to docker-compose.prod.yml
+        run: |
+          ssh -o "StrictHostKeyChecking no" ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "
+            cd /apps/intellireading-backend &&
             sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' docker-compose.prod.yml &&
             sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' docker-compose.prod.yml &&
             sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' docker-compose.prod.yml &&
             sed -i -e 's,@@API_SERVER_API_KEY@@,${{ secrets.API_SERVER_API_KEY}},g' docker-compose.prod.yml &&
             docker compose --env-file .env.prod up -d --remove-orphans --build
           "
+  
