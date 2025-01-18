@@ -8,11 +8,20 @@
 [![GitHub - Lint](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/lint.yml)
 [![GitHub - Test](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml/badge.svg)](https://github.com/0x6f677548/intellireading-backend/actions/workflows/test.yml)
 
-Intellireading backend represents a server composed by a couple of containers that exposes the Intellireading Library through FastAPI, NGINX and that is the backend of the [Intellireading website](https://intellireading.com/).
+Intellireading backend represents a server composed by a couple of containers that expose the [Intellireading CLI Library](https://www.github.com/0x6f677548/intellireading-cli)
+ through FastAPI and NGINX and instrumented with OpenTelemetry. This server is the backend of the [Intellireading website](https://intellireading.com/).
 
-If you are looking to metaguide an EPUB file, you may visit the [Intellireading website](https://intellireading.com/) and upload your file there or, alternatively, you can use the Intellireading CLI, which is a command-line tool that is part of the Intellireading library.
+Example of a text converted to a metaguided text:
+![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/sample.png) 
 
-If you want to know more about the Intellireading Library, please visit the [Intellireading Library repository](https://github.com/0x6f677548/intellireading-cli).
+
+This repo is part of the [Intellireading](https://intellireading.com/) project, which aims to help people with dyslexia, ADHD, or anyone who wants to improve their reading focus and speed. 
+
+## Other Intellireading Code Repositories
+- [Intellireading website](https://www.github.com/0x6f677548/intellireading-www), which allows anyone to convert an Epub to the metaguided version.
+- [Backend Servers](https://www.github.com/0x6f677548/intellireading-backend), that support the Intellireading website.
+- [CLI Tool](https://www.github.com/0x6f677548/intellireading-cli). A standalone tool and library that can be used to metaguide epub files.
+- [Calibre Plugins](https://www.github.com/0x6f677548/intellireading-calibre-plugins). A set of plugins that can be used to metaguide epub files using Calibre.
 
 
 ## What is Epub Metaguiding?
@@ -22,93 +31,20 @@ If you want to know more about the Intellireading Library, please visit the [Int
 
 **Metagu**iding **i**s **partic**ulary **use**ful **fo**r **peo**ple **wi**th **dysl**exia **o**r **ADH**D, **bu**t **i**t **ca**n **b**e **us**ed **b**y **any**one **wh**o **wan**ts **t**o **impr**ove **the**ir **read**ing **foc**us **an**d **spe**ed. **Fo**r **mo**re **inform**ation, **vis**it **th**e [**Intelli**reading **webs**ite.](https://intellireading.com/)
 
-
-## Developing - build and run
-
-### start all docker containers with all project components  (except dev profile)
-attached mode:
-`docker compose up`
-
-detached mode:
-`docker compose up -d`
-
-### start all docker containers with all project components (including dev profile)
-attached mode:
-`docker compose --profile dev up`
-
-detached mode:
-`docker compose --profile dev up -d`
-
-stoping all containers, rebuild images and start all containers again:
-`docker compose down && docker compose build && docker compose up`
-
-deleting ALL docker images & containers and starting from scratch:
-`docker compose down -v --rmi all && docker compose up -d`
-
-deleting ALL docker images & containers and starting from scratch (including dev profile):
-`docker compose --profile dev down -v --rmi all && docker compose --profile dev up -d`
-
-### using client docker image
-attaching to the shell of a running client image
-`docker attach client`
-(detach using ctrl+p ctrl+q)
-
-running a new client image and attaching to its shell
-`docker run --rm -it client`
-
-
-### testing
-
-#### Calling the api_server using curl (from the test directory)
-
-`curl -X POST http://localhost:81/metaguiding/epub/transform -H "accept: application/json" -H "Content-Type: multipart/form-data" -H "X-API-KEY: 123" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o test_data/output/test.epub -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r"`
-
-(using api-key in the query string)
-`curl -X POST http://localhost:80/metaguiding/epub/transform?api-key=myapikey -H "accept: application/json" -H "Content-Type: multipart/form-data" -F "file=@test_data/input/400files.epub;type=application/epub+zip"  -o /dev/null -w "\n\rx-response-time: %{time_total}s\n\rstatus-code: %{http_code}\n\r`
-
-
-## troubleshooting
-### docker
-#### diagnosing a docker container that keeps restarting
-`docker logs --tail 50 --follow --timestamps <container_name>`
-
-### goaccess log analyzer
-#### analyzing the api_server access log
-sudo goaccess .log/api_server/unit-access.log --log-format='%h %e %^[%d:%t %^] %v "%r" %s %b "%R" "%u" %^' --date-format='%d/%b/%Y' --time-format='%H:%M:%S'
-
-#### analyzing the api_proxy access log
-##### api.intellireading.com
-sudo goaccess .log/api_proxy/api.intelireading.com.nginx-access.log --log-format='%h %e %^[%d:%t %^] %v "%r" %s %b "%R" "%u" %^' --date-format='%d/%b/%Y' --time-format='%H:%M:%S'
-#### general nginx access log
-sudo goaccess .log/api_proxy/nginx-access.log --log-format='%h %e %^[%d:%t %^] %v "%r" %s %b "%R" "%u" %^' --date-format='%d/%b/%Y' --time-format='%H:%M:%S'
-
-
-### mapping a local folder to a remote folder on the server
- Ensure you have a config file in ~/.ssh/config with the following content:
- ``` language=bash
-    Host server
-        HostName <server ip address>
-        User <username>
-        IdentityFile ~/.ssh/<private key file>
- ```
-Then, execute the following command:
-``` language=bash
-    sshfs user@server:/home/user /mnt/c/temp/user
-```
-where:
-- user is the username
-- server is the server name or ip address
-- /home/user is the remote folder
-- /mnt/c/temp/user is the local folder
-
-### mapping a local port to a remote port on the server
-`ssh -L 8080:localhost:80 user@server -i ~/.ssh/private_key_file`
-where:
-- user is the username
-- server is the server name or ip address
-- private_key_file is the private key file
-- 8080 is the local port
-- 80 is the remote port
-- localhost is the remote host to be used (in this case, the same as the local host)
-
- then you can access the remote server using [http://localhost:8080](http://localhost:8080)
+# Architecture
+This project is also a playground for my FastAPI-blueprint, which is a project template that includes a lot of the best practices and tools that 
+I use in my FastAPI projects. You can find more information about the blueprint in the [FastAPI-blueprint repository](http://www.github.com/0x6f677548/fastapi-blueprint).
+The project is composed of the following containers:
+- **api-proxy**: An NGINX server that acts as a reverse proxy for api-server (FastAPI). 
+All inbound requests are limited to cloudflare IPs and forwarded to the api-server, after initial checks. Nginx longs are send through syslog to the otel-collector.
+- **api-server**: A FastAPI server that exposes the Intellireading CLI library through a REST API and is instrumented with OpenTelemetry, sending traces, metrics, and logs to the otel-collector.
+- **otel_collector**: An OpenTelemetry collector that exposes syslog and otel endpoints to receive logs, traces, and metrics from the api-proxy and api-server and forwards them to a remote OTEL compliant backend, which may be Jaeger, Prometheus, New Relic, Datadog, or any other backend that supports the OpenTelemetry protocol.
+ 
+## Other components
+Some of the tools and libraries used in this project are:
+- **FastAPI**: A modern, fast (high-performance), web framework for building APIs with Python 3.6+ based on standard Python type hints.
+- **Hatch**: A modern project, package, and virtual env manager for Python.
+- **NGINX**: A web server that can also be used as a reverse proxy, load balancer, etc.
+- **OpenTelemetry**: A set of APIs, libraries, agents, and instrumentation to provide observability.
+- **Tailscale**: A ZeroTier alternative that provides a secure, private network for your servers.
+- **Docker**: A set of platform as a service products that use OS-level virtualization to deliver software in packages called containers.
