@@ -1,4 +1,5 @@
 FROM python:3-slim AS builder
+ENV PIP_ROOT_USER_ACTION=ignore
 
 RUN mkdir /app
 WORKDIR /app
@@ -13,6 +14,7 @@ RUN hatch build
 
 
 FROM python:3-slim
+ENV PIP_ROOT_USER_ACTION=ignore
 
 RUN mkdir /app
 WORKDIR /app
