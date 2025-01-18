@@ -7,10 +7,7 @@ class CORSMiddleware(fastapi_CORSMiddleware):
     _logger = logging.getLogger(__name__)
     middleware_config = None
     middleware_enabled = True
-    allow_origins: ClassVar[list[str]] = []
     allow_origins_regex: ClassVar[None] = None
-    allow_methods: ClassVar[list[str]] = []
-    allow_headers: ClassVar[list[str]] = []
     allow_credentials: ClassVar[bool] = False
     max_age: ClassVar[int] = 600
     expose_headers: ClassVar[list[str]] = []
