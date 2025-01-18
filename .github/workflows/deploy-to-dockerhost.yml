@@ -25,7 +25,8 @@ jobs:
       - name: Display date/time in output (forensics when triaging issues)
         run: echo ${{ steps.datetime.outputs.datetime }}
 
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
       
       - name: Check execution environment
         id: check_env
@@ -38,6 +39,9 @@ jobs:
 
       - name: Tailscale on ACT
         if: steps.check_env.outputs.is_act == 'true'
+        # original tailscale/github-action@v3 has some problems on ACT so we use 
+        # pikachews/tailscale-action
+        # see https://github.com/tailscale/github-action/issues/120#issuecomment-2571469160
         uses: pikachews/tailscale-action@v1
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
