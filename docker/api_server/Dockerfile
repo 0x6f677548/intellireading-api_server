@@ -17,7 +17,6 @@ FROM python:3-slim
 ENV PIP_ROOT_USER_ACTION=ignore
 
 RUN mkdir /app
-WORKDIR /app
 
 RUN pip install --no-cache --upgrade pip 
 
@@ -47,6 +46,10 @@ RUN pip install --no-cache-dir /app/dist/*.whl
 #ENV CONFIG_FILE=/app/intellireading/api_server/config/api_server.config.json
 #-------
 
+# Clean up unnecessary files
+RUN rm -rf /app
+
+# create a user to run the application
 RUN addgroup --system app && adduser --system --group app 
 
 
