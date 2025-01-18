@@ -111,7 +111,7 @@ def _get_valid_epub(file: UploadFile) -> UploadFile:
             "application/epub+zip",
             "application/x-epub+zip",
         ],
-        ["epub"],
+        ["epub", "kepub", "zip"],
     )
 
     def _check_zip_file(file: UploadFile):
