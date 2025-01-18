@@ -32,8 +32,26 @@ class AuthConfig:
         This function is used to initialize the authentication module.
         It will read the configuration and set the global variables accordingly.
         """
+
+        def _mask_sensitive_values(config: dict) -> dict:
+            import copy
+            sensitive_keys = {"secret_key", "valid_api_keys"}
+            masked_config = copy.deepcopy(config)
+            def recursive_mask(d):
+                for k, v in d.items():
+                    if isinstance(v, dict):
+                        recursive_mask(v)
+                    elif k.lower() in sensitive_keys:
+                        d[k] = "****"
+            recursive_mask(masked_config)
+            return masked_config
+
+
+
         self._authentication_config = config.get("authentication", {}) if config else {}
-        _logger.info("Configuration for authentication: %s", self._authentication_config)
+        _logger.info("Configuration for authentication: %s",
+                     _mask_sensitive_values(self._authentication_config))
+
         # turstile configuration
         _turnstile_config = self._authentication_config.get("turnstile", {})
         self._turnstile_enabled = _turnstile_config.get("enabled", self._turnstile_enabled)
