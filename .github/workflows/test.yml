@@ -39,15 +39,12 @@ jobs:
         with:
           python-version: 3.13
       
-      - name: Install dependencies
+      - name: Update pip and install hatch
         run: |
           export PIP_ROOT_USER_ACTION=ignore
-          pip install --upgrade pip 
-          pip install --no-cache-dir .dependencies/*.whl
-          pip install .
-          pip install pytest
-          pip install httpx
-      
-      - name: Run tests
-        run: |
-          pytest --log-level DEBUG tests
+          pip install --upgrade pip
+          pip install hatch
+  
+      - name: Hatch run test
+        run: hatch run test 
+  
