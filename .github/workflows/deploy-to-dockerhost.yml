@@ -38,9 +38,10 @@ jobs:
       - name: ssh deploy
         run: |
           ssh -o "StrictHostKeyChecking no" ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "
-           mkdir -p /${{ github.event.repository.name }} &&
-            cd /${{ github.event.repository.name }} &&
+           mkdir -p /apps/${{ github.event.repository.name }} &&
+            cd /apps/${{ github.event.repository.name }} &&
             docker compose --env-file .env.prod down &&
+            rsync -avzi --delete --exclude=log/ --exclude-from=.deploy/rsync-exclusions ${{ github.workspace }}/ ./
             sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' docker-compose.prod.yml &&
             sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' docker-compose.prod.yml &&
             sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' docker-compose.prod.yml &&
