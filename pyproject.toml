@@ -69,6 +69,9 @@ packages = ["src/intellireading"]
 exclude = ["tests"]
 
 [tool.hatch.envs.default]
+# using uv for faster installs
+installer = "uv"
+
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
@@ -78,7 +81,7 @@ dependencies = [
 
 # Pre-install dependencies that are not available on PyPI
 pre-install-commands = [
-  "python -c \"import glob, subprocess; [subprocess.run(['python', '-m', 'pip', 'install', '--no-cache-dir', whl]) for whl in glob.glob('.dependencies/*.whl')]\"",
+   "python -c \"import glob, subprocess; [subprocess.run(['uv', 'pip', 'install', whl]) for whl in glob.glob('.dependencies/*.whl')]\"",
 ]
 
 [tool.hatch.envs.default.env-vars]
