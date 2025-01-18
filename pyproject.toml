@@ -76,8 +76,9 @@ dependencies = [
   #"intellireading-cli @ {root:parent:uri}/intellireading-cli",
 ]
 
+# Pre-install dependencies that are not available on PyPI
 pre-install-commands = [
-  "python -m pip install --disable-pip-version-check -q -e ../intellireading-cli/",
+  "python -c \"import glob, subprocess; [subprocess.run(['python', '-m', 'pip', 'install', '--no-cache-dir', whl]) for whl in glob.glob('.dependencies/*.whl')]\"",
 ]
 
 [tool.hatch.envs.default.env-vars]
@@ -109,7 +110,7 @@ dependencies = [
 [tool.hatch.envs.lint.scripts]
 typing = "mypy --ignore-missing-imports --install-types --non-interactive {args:src/intellireading tests}"
 style = [
-  "ruff {args:.}",
+  "ruff check {args:.}",
   "black --check --diff {args:.}",
 ]
 fmt = [
