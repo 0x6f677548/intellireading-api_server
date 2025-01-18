@@ -1,5 +1,9 @@
 FROM otel/opentelemetry-collector-contrib:latest 
 
+# Links Docker image with repository
+LABEL org.opencontainers.image.source https://github.com/0x6f677548/intellireading-backend
+
+
 # copy the config file to the /etc folder
 COPY ./docker/otel_collector/config/otel_collector.config.yaml /etc/otel_collector.config.yaml
 

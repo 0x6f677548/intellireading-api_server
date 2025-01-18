@@ -2,6 +2,10 @@
 # it should be built with the context set to the root of the intellireading project
 FROM nginx:mainline
 
+# Links Docker image with repository
+LABEL org.opencontainers.image.source https://github.com/0x6f677548/intellireading-backend
+
+
 
 #create a backup of the original config files
 RUN cp /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak

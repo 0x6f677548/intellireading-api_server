@@ -16,6 +16,9 @@ RUN hatch build
 FROM python:3-slim
 ENV PIP_ROOT_USER_ACTION=ignore
 
+# Links Docker image with repository
+LABEL org.opencontainers.image.source https://github.com/0x6f677548/intellireading-backend
+
 RUN mkdir /app
 
 RUN pip install --no-cache --upgrade pip 
