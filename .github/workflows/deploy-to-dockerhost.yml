@@ -26,28 +26,24 @@ jobs:
         run: echo ${{ steps.datetime.outputs.datetime }}
 
       - uses: actions/checkout@v4
+      
+      - name: Tailscale
+        uses: tailscale/github-action@v3
         with:
-          # This captures the branch/tag reference of the event
-          ref: ${{ github.ref }}  
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
 
 
-      - uses: easingthemes/ssh-deploy@v5.1.0
-        name: ssh deploy
-        with:
-          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
-          ARGS: "-avzi --delete --exclude=log/ --exclude-from=.deploy/rsync-exclusions "
-          SOURCE: "/"
-          REMOTE_HOST: ${{ vars.PROD_SSH_HOST }}
-          REMOTE_USER: ${{ secrets.PROD_SSH_USER }}
-          TARGET: "intellireading/"
-          SCRIPT_BEFORE: |
-            mkdir -p intellireading
-            cd intellireading
-            docker compose --env-file .env.prod down
-          SCRIPT_AFTER: |
-            cd intellireading
-            sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' docker-compose.prod.yml
-            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ vars.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' docker-compose.prod.yml
-            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' docker-compose.prod.yml
-            sed -i -e 's,@@API_SERVER_API_KEY@@,${{ secrets.API_SERVER_API_KEY}},g' docker-compose.prod.yml
+      - name: ssh deploy
+        run: |
+          ssh -o "StrictHostKeyChecking no" ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} "
+           mkdir -p /${{ github.event.repository.name }} &&
+            cd /${{ github.event.repository.name }} &&
+            docker compose --env-file .env.prod down &&
+            sed -i -e 's,@@API_SERVER_TURNSTILE_SECRET_KEY@@,${{ secrets.API_SERVER_TURNSTILE_SECRET_KEY}},g' docker-compose.prod.yml &&
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_ENDPOINT}},g' docker-compose.prod.yml &&
+            sed -i -e 's,@@OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY@@,${{ secrets.OTEL_COLLECTOR_OTEL_EXPORTER_OTLP_API_KEY}},g' docker-compose.prod.yml &&
+            sed -i -e 's,@@API_SERVER_API_KEY@@,${{ secrets.API_SERVER_API_KEY}},g' docker-compose.prod.yml &&
             docker compose --env-file .env.prod up -d --remove-orphans --build
+          "

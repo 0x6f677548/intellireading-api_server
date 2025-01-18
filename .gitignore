@@ -7,3 +7,4 @@ test/test_data/output/*
 .vscode/settings.json
 .log/*
 dist/*
+act-secrets
