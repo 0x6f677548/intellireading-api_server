@@ -69,7 +69,11 @@ class ConfigDict(dict):
         _value = super().get(key, default_value)
 
         # check if the value is actually a environment variable and if it is, use the default value (if it is defined)
-        if default_value is not None and isinstance(_value, str) and self._env_var_regex.match(_value):
+        if (
+            default_value is not None
+            and isinstance(_value, str)
+            and self._env_var_regex.match(_value)
+        ):
             self._logger.warning(
                 "Environment variable %s is not defined. Falling back to default value: %s",
                 _value,

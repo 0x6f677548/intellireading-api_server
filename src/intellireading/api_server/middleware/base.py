@@ -51,5 +51,4 @@ class BaseHTTPMiddleware(starlette_BaseHTTPMiddleware):
     def _getrequest_id(self, request) -> str:
         if hasattr(request.state, "request_id"):
             return request.state.request_id
-        else:
-            return ""
+        return ""

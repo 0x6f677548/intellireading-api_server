@@ -19,7 +19,9 @@ def test_metaguiding_epub_transform():
 
         # Use the valid EPUB file for upload
         response = client.post(
-            "metaguiding/epub/transform", headers=headers, files={"file": ("test.epub", f, "application/epub+zip")}
+            "metaguiding/epub/transform",
+            headers=headers,
+            files={"file": ("test.epub", f, "application/epub+zip")},
         )
 
         # Check if the response status code is 201 (OK)
@@ -55,7 +57,9 @@ def test_metaguiding_xhtml_transform_simpleinput():
 
         # Use the valid XHTML file for upload
         response = client.post(
-            "metaguiding/xhtml/transform", headers=headers, files={"file": ("test.xhtml", f, "application/xhtml+xml")}
+            "metaguiding/xhtml/transform",
+            headers=headers,
+            files={"file": ("test.xhtml", f, "application/xhtml+xml")},
         )
 
         # Check if the response status code is 201 (OK)
@@ -66,7 +70,9 @@ def test_metaguiding_xhtml_transform_simpleinput():
 
         output_stream = io.BytesIO(response.content)
 
-        xhtml_assertion_filename = os.path.join(os.path.dirname(__file__), "test_files", "simpleinput-result.xhtml")
+        xhtml_assertion_filename = os.path.join(
+            os.path.dirname(__file__), "test_files", "simpleinput-result.xhtml"
+        )
         with open(xhtml_assertion_filename, "rb") as xhtml_assertion_file:
             output_stream.seek(0)
 
@@ -87,7 +93,9 @@ def test_metaguiding_xhtml_transform():
 
         # Use the valid XHTML file for upload
         response = client.post(
-            "metaguiding/xhtml/transform", headers=headers, files={"file": ("test.xhtml", f, "application/xhtml+xml")}
+            "metaguiding/xhtml/transform",
+            headers=headers,
+            files={"file": ("test.xhtml", f, "application/xhtml+xml")},
         )
 
         # Check if the response status code is 201 (OK)

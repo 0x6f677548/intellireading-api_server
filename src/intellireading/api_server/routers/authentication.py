@@ -50,13 +50,18 @@ class AuthConfig:
             return masked_config
 
         self._authentication_config = config.get("authentication", {}) if config else {}
-        _logger.info("Configuration for authentication: %s", _mask_sensitive_values(self._authentication_config))
+        _logger.info(
+            "Configuration for authentication: %s",
+            _mask_sensitive_values(self._authentication_config),
+        )
 
         # turstile configuration
         _turnstile_config = self._authentication_config.get("turnstile", {})
         self._turnstile_enabled = _turnstile_config.get("enabled", self._turnstile_enabled)
         self._turnstile_secret_key = _turnstile_config.get("secret_key", None)
-        self._turnstile_siteverify_url = _turnstile_config.get("siteverify_url", self._turnstile_siteverify_url)
+        self._turnstile_siteverify_url = _turnstile_config.get(
+            "siteverify_url", self._turnstile_siteverify_url
+        )
 
         # api key management configuration
         _api_key_management_config = self._authentication_config.get("api_key_management", {})
@@ -73,7 +78,9 @@ authconfig = AuthConfig()
 _tracer: Tracer = trace.get_tracer(__name__)
 
 
-async def _validate_turnstile_token(secret_key, token: str | None = None, ip: str | None = None) -> bool:
+async def _validate_turnstile_token(
+    secret_key, token: str | None = None, ip: str | None = None
+) -> bool:
     with _tracer.start_as_current_span("_validate_turnstile_token"):
         if not token:
             return False
@@ -86,7 +93,9 @@ async def _validate_turnstile_token(secret_key, token: str | None = None, ip: st
             form_data.add_field("remoteip", ip)
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(authconfig._turnstile_siteverify_url, data=form_data) as response:
+            async with session.post(
+                authconfig._turnstile_siteverify_url, data=form_data
+            ) as response:
                 outcome = await response.json()
                 _success = outcome.get("success")
                 if not _success:
@@ -137,9 +146,9 @@ async def get_api_key(
     """
 
     # TODO: hard coded api key for now. refactor to use a key management service # pylint: disable=fixme
-    _authorized: bool = (api_key_header_value is not None and api_key_header_value in authconfig._valid_api_keys) or (
-        api_key_query_value is not None and api_key_query_value in authconfig._valid_api_keys
-    )
+    _authorized: bool = (
+        api_key_header_value is not None and api_key_header_value in authconfig._valid_api_keys
+    ) or (api_key_query_value is not None and api_key_query_value in authconfig._valid_api_keys)
 
     if _authorized:
         _api_key = api_key_query_value if api_key_query_value else api_key_header_value

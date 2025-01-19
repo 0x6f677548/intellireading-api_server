@@ -163,7 +163,9 @@ async def _process_file_request(request: Request, file: UploadFile, f):
             _filename,
             f.__name__,
         )
-        with _tracer.start_as_current_span("processing file", set_status_on_exception=False, record_exception=False):
+        with _tracer.start_as_current_span(
+            "processing file", set_status_on_exception=False, record_exception=False
+        ):
             _output_stream: BytesIO = f(file.file)
 
         with _tracer.start_as_current_span("sending file"):

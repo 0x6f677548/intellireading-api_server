@@ -1,4 +1,6 @@
-from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware as BaseOpenTelemetryMiddleware
+from opentelemetry.instrumentation.asgi import (
+    OpenTelemetryMiddleware as BaseOpenTelemetryMiddleware,
+)
 from opentelemetry.trace import Span
 
 
