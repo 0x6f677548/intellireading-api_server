@@ -17,6 +17,8 @@ run-name: ${{ github.ref_name }} -> test (
   ${{ github.run_attempt }}
   )
 
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -46,5 +48,4 @@ jobs:
           pip install hatch
   
       - name: Hatch run test
-        run: hatch run test 
-  
+        run: hatch run test

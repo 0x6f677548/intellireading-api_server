@@ -11,6 +11,8 @@ run-name: ${{ github.ref_name }} -> deploy_to_dockerhost (
   ${{ github.run_attempt }}
   )
 
+permissions:
+  contents: read
     
 jobs:
   deploy_to_dockerhost:
@@ -92,4 +94,3 @@ jobs:
             sed -i -e 's,@@API_SERVER_API_KEY@@,${{ secrets.API_SERVER_API_KEY}},g' docker-compose.prod.yml &&
             docker compose --env-file .env.prod up -d --remove-orphans --build
           "
-  
