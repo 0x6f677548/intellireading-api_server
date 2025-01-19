@@ -29,7 +29,11 @@ RUN pip install --no-cache --upgrade pip
 # this is useful because the api_server might be using a private package that is 
 # yet to be published to the public pypi repository
 COPY  ./.dependencies /app/.dependencies
-RUN pip install --no-cache-dir /app/.dependencies/*.whl
+RUN if ls -1 /app/.dependencies/*.whl >/dev/null 2>&1; then \
+    pip install --no-cache-dir /app/.dependencies/*.whl; \
+  else \
+    echo "No .whl files found in /app/.dependencies"; \
+  fi
 
 
 
