@@ -12,6 +12,7 @@ run-name: ${{ github.ref_name }} -> build_and_pub_to_pypi (
   ${{ github.run_attempt }}
   )
   
+permissions: {}
             
 jobs:
 

@@ -8,15 +8,13 @@ on:
     branches: [master, main]
 
   workflow_dispatch:
-  
-  schedule:
-    # run on mondays and thursdays at 00:00 UTC
-    - cron: '0 0 * * 1'
-    
+      
 # set the run-name 
 run-name: ${{ github.ref_name }} -> super_linter (
   ${{ github.run_attempt }}
   )
+
+permissions: {}
 
 jobs:
   super_linter:
@@ -43,11 +41,28 @@ jobs:
           # list of changed files within `super-linter`
           fetch-depth: 0
 
-      ################################
-      # Run Linter against code base #
-      ################################
-      - name: Lint Code Base
+      - name: Check execution environment
+        id: check_env
+        run: |
+          if [ "$ACT" = "true" ]; then
+            echo "is_act=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_act=false" >> $GITHUB_OUTPUT
+          fi
+            
+
+      - name: Super-Linter on ACT
+        if: steps.check_env.outputs.is_act == 'true'
+        uses: super-linter/super-linter@v7
+        env:
+          DEFAULT_BRANCH: main
+          RUN_LOCAL: true
+
+
+      - name: Super-Linter on other environments (like github)
+        if: steps.check_env.outputs.is_act == 'false'
         uses: super-linter/super-linter@v7
         env:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  

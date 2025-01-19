@@ -10,6 +10,7 @@ run-name: ${{ github.ref_name }} -> create_draft_release (
   ${{ github.run_attempt }}
   )
     
+permissions: {}
 
 jobs:
     
