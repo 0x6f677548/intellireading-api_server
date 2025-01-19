@@ -117,10 +117,10 @@ dependencies = [
 typing = "mypy --ignore-missing-imports --install-types --non-interactive {args:src/intellireading tests}"
 style = [
   "ruff check {args:.}",
-  "black -l 100 --check --diff {args:.}",
+  "black --check --diff {args:.}",
 ]
 fmt = [
-  "black -l 100 {args:.}",
+  "black {args:.}",
   "ruff --fix {args:.}",
   "style",
 ]
@@ -131,7 +131,7 @@ all = [
 
 [tool.black]
 target-version = ["py37"]
-line-length = 120
+line-length = 100
 skip-string-normalization = true
 
 [tool.ruff]
