@@ -105,6 +105,9 @@ python = ["3.13"]
 
 [tool.hatch.envs.lint]
 detached = true
+# using uv for faster installs
+installer = "uv"
+
 dependencies = [
   "black>=23.1.0",
   "mypy>=1.0.0",
@@ -114,10 +117,10 @@ dependencies = [
 typing = "mypy --ignore-missing-imports --install-types --non-interactive {args:src/intellireading tests}"
 style = [
   "ruff check {args:.}",
-  "black --check --diff {args:.}",
+  "black -l 100 --check --diff {args:.}",
 ]
 fmt = [
-  "black {args:.}",
+  "black -l 100 {args:.}",
   "ruff --fix {args:.}",
   "style",
 ]
