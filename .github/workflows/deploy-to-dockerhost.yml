@@ -18,6 +18,8 @@ jobs:
   deploy_to_dockerhost:
     name: deploy_to_dockerhost
     runs-on: ubuntu-latest
+    environment: production
+    concurrency: production
 
     steps:
       - name: Get current date and time
