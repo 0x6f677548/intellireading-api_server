@@ -31,8 +31,8 @@ This repo is part of the [Intellireading](https://intellireading.com/) project, 
 **Metagu**iding **i**s **partic**ulary **use**ful **fo**r **peo**ple **wi**th **dysl**exia **o**r **ADH**D, **bu**t **i**t **ca**n **b**e **us**ed **b**y **any**one **wh**o **wan**ts **t**o **impr**ove **the**ir **read**ing **foc**us **an**d **spe**ed. **Fo**r **mo**re **inform**ation, **vis**it **th**e [**Intelli**reading **webs**ite.](https://intellireading.com/)
 
 # Architecture
-This project is also a playground for my FastAPI-blueprint, which is a project template that includes a lot of the best practices and tools that 
-I use in my FastAPI projects. You can find more information about the blueprint in the [FastAPI-blueprint repository](http://www.github.com/0x6f677548/fastapi-blueprint).
+This project is also a playground for my FastAPI-bootstrap, which is a project template that includes a lot of the best practices and tools that 
+I use in my FastAPI projects. You can find more information about the bootstrap in the [FastAPI-bootstrap repository](http://www.github.com/0x6f677548/fastapi-bootstrap).
 The project is composed of the following containers:
 - **api-proxy**: An NGINX server that acts as a reverse proxy for api-server (FastAPI). 
 All inbound requests are limited to cloudflare IPs and forwarded to the api-server, after initial checks. Nginx longs are send through syslog to the otel-collector.
