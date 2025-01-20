@@ -7,13 +7,11 @@ client = TestClient(app)
 
 
 def test_metaguiding_epub_transform():
-
     # get the epub test file path from the tests folder
     epub_test_filename = os.path.join(os.path.dirname(__file__), "test_files", "input.epub")
 
     # Open the file in binary mode for uploading
     with open(epub_test_filename, "rb") as f:
-
         # Prepare headers with a valid API key from the environment
         headers = {"X-API-Key": os.environ.get("API_SERVER_API_KEY")}
 
@@ -45,13 +43,11 @@ def test_metaguiding_epub_transform():
 
 
 def test_metaguiding_xhtml_transform_simpleinput():
-
     # get the xhtml test file path from the tests folder
     xhtml_test_filename = os.path.join(os.path.dirname(__file__), "test_files", "simpleinput.xhtml")
 
     # Open the file in binary mode for uploading
     with open(xhtml_test_filename, "rb") as f:
-
         # Prepare headers with a valid API key
         headers = {"X-API-Key": os.environ.get("API_SERVER_API_KEY")}
 
@@ -81,13 +77,11 @@ def test_metaguiding_xhtml_transform_simpleinput():
 
 
 def test_metaguiding_xhtml_transform():
-
     # get the xhtml test file path from the tests folder
     xhtml_test_filename = os.path.join(os.path.dirname(__file__), "test_files", "input.xhtml")
 
     # Open the file in binary mode for uploading
     with open(xhtml_test_filename, "rb") as f:
-
         # Prepare headers with a valid API key
         headers = {"X-API-Key": os.environ.get("API_SERVER_API_KEY")}
 

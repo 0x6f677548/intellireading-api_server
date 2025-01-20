@@ -145,7 +145,7 @@ async def get_api_key(
     if the api key is not found, or is invalid, it will raise an HTTPException
     """
 
-    # TODO: hard coded api key for now. refactor to use a key management service # pylint: disable=fixme
+    # TODO: refactor to use a key management service # pylint: disable=fixme
     _authorized: bool = (
         api_key_header_value is not None and api_key_header_value in authconfig._valid_api_keys
     ) or (api_key_query_value is not None and api_key_query_value in authconfig._valid_api_keys)

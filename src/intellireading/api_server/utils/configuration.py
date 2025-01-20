@@ -6,14 +6,16 @@ import logging
 
 class ConfigDict(dict):
     """
-    A dictionary that encapsulates another dictionary and replaces environment variables in the values.
+    A dictionary that encapsulates another dictionary and replaces environment
+    variables in the values.
     If a value contains an environment variable in the format ${ENV_VAR_NAME}
     it is replaced with the value of the environment variable.
     If the environment variable is not defined, the value is not replaced.
     It uses expandvars from os.path to replace the environment variables.
 
-    It also provides a get method that will return the default value if the key is not found and
-    will convert the value to the type of the default value if the value is not of the same type.
+    It also provides a get method that will return the default value if the key
+    is not found and will convert the value to the type of the default value if
+    the value is not of the same type.
     """
 
     _env_var_regex = re.compile(r"\$([A-Za-z_][A-Za-z0-9_]*)|\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
@@ -68,7 +70,8 @@ class ConfigDict(dict):
     def get(self, key, default_value=None):
         _value = super().get(key, default_value)
 
-        # check if the value is actually a environment variable and if it is, use the default value (if it is defined)
+        # check if the value is actually a environment variable and if it is,
+        # use the default value (if it is defined)
         if (
             default_value is not None
             and isinstance(_value, str)

@@ -119,7 +119,8 @@ def _get_valid_epub(file: UploadFile) -> UploadFile:
 
         try:
             with ZipFile(file.file) as zip_file:
-                # testzip() returns None if the file is valid (else it returns the name of the first corrupt file)
+                # testzip() returns None if the file is valid
+                # (else it returns the name of the first corrupt file)
                 return zip_file.testzip() is None
         except BadZipFile:
             return False
@@ -173,7 +174,8 @@ async def _process_file_request(request: Request, file: UploadFile, f):
             # TODO: move this code to a separate module (utils.py?) # pylint: disable=fixme
             from typing import Generator
 
-            # this is a generator function that will be used to stream the file content and using asyncio
+            # this is a generator function that will be used to
+            # stream the file content and using asyncio
             # this will make sure we don't hit a performance bottleneck when sending large files
             async def get_file_content(stream: BytesIO) -> Generator:  # type: ignore
                 yield stream.read()  # type: ignore
