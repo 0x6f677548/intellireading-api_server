@@ -3,7 +3,7 @@
 FROM nginx:mainline
 
 # Links Docker image with repository
-LABEL org.opencontainers.image.source https://github.com/0x6f677548/intellireading-backend
+LABEL org.opencontainers.image.source=https://github.com/0x6f677548/intellireading-backend
 
 
 
