@@ -16,7 +16,7 @@ services:
       - api_server
       - otel_collector
     ports:
-      - 8080:8080
+      - 80:8080
     networks:
       - frontend_network
       - backend_network
