@@ -15,10 +15,8 @@ services:
     depends_on:
       - api_server
       - otel_collector
-    volumes:
-      - ./.log/api_proxy:/var/log/nginx
     ports:
-      - 80:80
+      - 8080:8080
     networks:
       - frontend_network
       - backend_network
@@ -39,13 +37,13 @@ services:
       - --host
       - api_server
       - --port
-      - "80"
+      - "8081"
 
     depends_on:
       - otel_collector
     environment:
       - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
-      - OTEL_PYTHON_LOG_CORRELATION = true
+      - OTEL_PYTHON_LOG_CORRELATION=true
       # - OTEL_PYTHON_LOG_LEVEL=DEBUG
       - OTEL_SERVICE_NAME=server.api.intellireading
       - OTEL_TRACES_EXPORTER=otlp

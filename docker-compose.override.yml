@@ -5,7 +5,7 @@ services:
   # api_server is a fastapi app 
   api_server: 
     ports:
-      - 81:80
+      - 8081:8081
 
 
   #-------------------------------------------------------------------
@@ -15,6 +15,9 @@ services:
   #     - dev: jaeger local container
   #     - prod: otlp collector in the cloud, like newrelic, datadog, etc.
   otel_collector:
+    depends_on:
+    - jaeger
+
     ports:
       #- 1888:1888 # pprof extension
       #- 8888:8888 # Prometheus metrics exposed by the collector
