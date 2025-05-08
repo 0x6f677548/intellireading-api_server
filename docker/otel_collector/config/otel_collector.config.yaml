@@ -5,7 +5,7 @@ receivers:
   #  a single receiver should be used, taking advantage of facility
   syslog/nginx:
     udp:
-      listen_address: "otel_collector:514"
+      listen_address: "otel_collector:40514"
     protocol: rfc3164
     operators:
       - type: json_parser
