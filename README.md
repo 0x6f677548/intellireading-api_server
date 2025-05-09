@@ -1,11 +1,9 @@
 ![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/intellireading.png)
 # API Server for Intellireading CLI
 
-[![GitHub - Stars](https://img.shields.io/github/stars/0x6f677548/intellireading-api_server.svg?style=social&label=Stars)](
 [![PyPI - Version](https://img.shields.io/pypi/v/intellireading-cli.svg)](https://pypi.org/project/intellireading-cli)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/intellireading-cli.svg)](https://pypi.org/project/intellireading-cli)
 [![Deploy to GHCR](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/build-and-publish-to-ghcr.yml/badge.svg)](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/build-and-publish-to-ghcr.yml)
-[![Deploy](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/deploy-to-dockerhost.yml/badge.svg)](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/deploy-to-dockerhost.yml)
 [![GitHub - Lint](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/lint.yml/badge.svg)](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/lint.yml)
 [![GitHub - Test](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/test.yml/badge.svg)](https://go.hugobatista.com/gh/intellireading-api_server/actions/workflows/test.yml)
 
