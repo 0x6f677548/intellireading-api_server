@@ -53,9 +53,9 @@ allow-direct-references = true
 api-server = "intellireading.api_server:entrypoint"
 
 [project.urls]
-Documentation = "https://github.com/0x6f677548/intellireading-backend#readme"
-Issues = "https://github.com/0x6f677548/intellireading-backend/issues"
-Source = "https://github.com/0x6f677548/intellireading-backend"
+Documentation = "https://github.com/0x6f677548/intellireading-api_server#readme"
+Issues = "https://github.com/0x6f677548/intellireading-api_server/issues"
+Source = "https://github.com/0x6f677548/intellireading-api_server"
 
 [tool.hatch.version]
 path = "src/intellireading/api_server/__about__.py"
@@ -194,8 +194,8 @@ omit = [
 ]
 
 [tool.coverage.paths]
-intellireading = ["src/intellireading", "*/intellireading-backend/src/intellireading"]
-tests = ["tests", "*/intellireading-backend/tests"]
+intellireading = ["src/intellireading", "*/intellireading-api_server/src/intellireading"]
+tests = ["tests", "*/intellireading-api_server/tests"]
 
 [tool.coverage.report]
 exclude_lines = [

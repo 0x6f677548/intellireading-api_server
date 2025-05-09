@@ -17,7 +17,7 @@ FROM python:3-slim
 ENV PIP_ROOT_USER_ACTION=ignore
 
 # Links Docker image with repository
-LABEL org.opencontainers.image.source=https://github.com/0x6f677548/intellireading-backend
+LABEL org.opencontainers.image.source=https://github.com/0x6f677548/intellireading-api_server
 
 RUN mkdir /app
 
