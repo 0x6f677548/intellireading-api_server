@@ -53,9 +53,9 @@ allow-direct-references = true
 api-server = "intellireading.api_server:entrypoint"
 
 [project.urls]
-Documentation = "https://github.com/0x6f677548/intellireading-api_server#readme"
-Issues = "https://github.com/0x6f677548/intellireading-api_server/issues"
-Source = "https://github.com/0x6f677548/intellireading-api_server"
+Documentation = "https://go.hugobatista.com/gh/intellireading-api_server#readme"
+Issues = "https://go.hugobatista.com/gh/intellireading-api_server/issues"
+Source = "https://go.hugobatista.com/gh/intellireading-api_server"
 
 [tool.hatch.version]
 path = "src/intellireading/api_server/__about__.py"
