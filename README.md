@@ -1,4 +1,4 @@
-![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/intellireading.png)
+![Intellireading.com](https://go.hugobatista.com/ghraw/intellireading-www/main/src/img/intellireading.png)
 # API Server for Intellireading CLI
 
 [![PyPI - Version](https://img.shields.io/pypi/v/intellireading-cli.svg)](https://pypi.org/project/intellireading-cli)
@@ -10,7 +10,7 @@
 Intellireading API server exposes the [Intellireading CLI Library](https://go.hugobatista.com/gh/intellireading-cli) through FastAPI. It is the backend of the [Intellireading site](https://intellireading.com/).
 
 Example of a text converted to a metaguided text:
-![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/sample.png) 
+![Intellireading.com](https://go.hugobatista.com/ghraw/intellireading-www/main/src/img/sample.png) 
 
 
 This repo is part of the [Intellireading](https://intellireading.com/) project, which aims to help people with dyslexia, ADHD, or anyone who wants to improve their reading focus and speed. 
