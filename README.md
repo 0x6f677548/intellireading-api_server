@@ -9,7 +9,7 @@
 [![GitHub - Lint](https://github.com/0x6f677548/intellireading-api_server/actions/workflows/lint.yml/badge.svg)](https://github.com/0x6f677548/intellireading-api_server/actions/workflows/lint.yml)
 [![GitHub - Test](https://github.com/0x6f677548/intellireading-api_server/actions/workflows/test.yml/badge.svg)](https://github.com/0x6f677548/intellireading-api_server/actions/workflows/test.yml)
 
-Intellireading API server exposes the [Intellireading CLI Library](https://www.github.com/0x6f677548/intellireading-cli) through FastAPI. It is the backend of the [Intellireading site](https://intellireading.com/).
+Intellireading API server exposes the [Intellireading CLI Library](https://go.hugobatista.com/gh/intellireading-cli) through FastAPI. It is the backend of the [Intellireading site](https://intellireading.com/).
 
 Example of a text converted to a metaguided text:
 ![Intellireading.com](https://raw.githubusercontent.com/0x6f677548/intellireading-www/main/src/img/sample.png) 
@@ -18,10 +18,10 @@ Example of a text converted to a metaguided text:
 This repo is part of the [Intellireading](https://intellireading.com/) project, which aims to help people with dyslexia, ADHD, or anyone who wants to improve their reading focus and speed. 
 
 ## [Other Intellireading Code Repositories](https://github.com/stars/0x6f677548/lists/intellireading)
-- [Intellireading site](https://www.github.com/0x6f677548/intellireading-www), which allows anyone to convert an EPUB to the metaguided version.
-- [API Server](https://www.github.com/0x6f677548/intellireading-api_server), that support the Intellireading site.
-- [Command-Line tool](https://www.github.com/0x6f677548/intellireading-cli). A standalone tool and library that can be used to metaguide EPUB files.
-- [Calibre Plugins](https://www.github.com/0x6f677548/intellireading-calibre-plugins). A set of plugins that can be used to metaguide EPUB files using Calibre.
+- [Intellireading site](https://go.hugobatista.com/gh/intellireading-www), which allows anyone to convert an EPUB to the metaguided version.
+- [API Server](https://go.hugobatista.com/gh/intellireading-api_server), that support the Intellireading site.
+- [Command-Line tool](https://go.hugobatista.com/gh/intellireading-cli). A standalone tool and library that can be used to metaguide EPUB files.
+- [Calibre Plugins](https://go.hugobatista.com/gh/intellireading-calibre-plugins). A set of plugins that can be used to metaguide EPUB files using Calibre.
 
 
 ## What is EPUB Metaguiding?
