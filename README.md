@@ -15,7 +15,7 @@ Example of a text converted to a metaguided text:
 
 This repo is part of the [Intellireading](https://intellireading.com/) project, which aims to help people with dyslexia, ADHD, or anyone who wants to improve their reading focus and speed. 
 
-## [Other Intellireading Code Repositories](https://github.com/stars/0x6f677548/lists/intellireading)
+## [Other Intellireading Code Repositories](https://go.hugobatista.com/ghstars/lists/intellireading)
 - [Intellireading site](https://go.hugobatista.com/gh/intellireading-www), which allows anyone to convert an EPUB to the metaguided version.
 - [API Server](https://go.hugobatista.com/gh/intellireading-api_server), that support the Intellireading site.
 - [Command-Line tool](https://go.hugobatista.com/gh/intellireading-cli). A standalone tool and library that can be used to metaguide EPUB files.
@@ -30,7 +30,7 @@ This repo is part of the [Intellireading](https://intellireading.com/) project, 
 **Metagu**iding **i**s **partic**ulary **use**ful **fo**r **peo**ple **wi**th **dysl**exia **o**r **ADH**D, **bu**t **i**t **ca**n **b**e **us**ed **b**y **any**one **wh**o **wan**ts **t**o **impr**ove **the**ir **read**ing **foc**us **an**d **spe**ed. **Fo**r **mo**re **inform**ation, **vis**it **th**e [**Intelli**reading **webs**ite.](https://intellireading.com/)
 
 # Architecture
-This project is also a playground for my FastAPI-bootstrap, which is a project template that includes a lot some best practices and tools that I use in my FastAPI projects. You can find more information about the bootstrap in the [FastAPI-bootstrap repository](http://www.github.com/0x6f677548/fastapi-bootstrap).
+This project is also a playground for my FastAPI-bootstrap, which is a project template that includes a lot some best practices and tools that I use in my FastAPI projects. You can find more information about the bootstrap in the [FastAPI-bootstrap repository](https://go.hugobatista.com/gh/fastapi-bootstrap).
 A typical deployment would be composed of the following containers:
 - **api-proxy**: An NGINX server that acts as a reverse proxy for api-server (FastAPI). 
 - **api-server**: A FastAPI server that exposes the Intellireading CLI library through a REST API and is instrumented with OpenTelemetry, sending traces, metrics, and logs to an otel-collector.
