@@ -412,7 +412,7 @@ dependencies = [
 requires-dist = [
     { name = "aiohttp", specifier = ">=3.13.4" },
     { name = "fastapi", specifier = ">=0.115.6" },
-    { name = "intellireading-cli", specifier = ">=2.1.0" },
+    { name = "intellireading-cli", specifier = ">=2.1.1" },
     { name = "opentelemetry-distro", specifier = ">=0.50b0" },
     { name = "opentelemetry-exporter-otlp", specifier = ">=1.29.0" },
     { name = "opentelemetry-instrumentation-fastapi", specifier = ">=0.50b0" },
@@ -424,16 +424,16 @@ requires-dist = [
 
 [[package]]
 name = "intellireading-cli"
-version = "2.1.0"
+version = "2.1.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "lxml" },
     { name = "regex" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a5/64/4a942237224047bb8f713318e966b1ae031079c2c2bcdd44c7a5c30b0d86/intellireading_cli-2.1.0.tar.gz", hash = "sha256:9f7382fb3736f7723489b1d9cefdd284710c61ad9a0f0d6da1e1f26470e2ea23", size = 23913, upload-time = "2025-08-27T20:15:18.711Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e2/3f/2a85b79b73b434d8a2f5fd009d362c43ef6e1b6ac8f5b7e3257ba7ec18d5/intellireading_cli-2.1.1.tar.gz", hash = "sha256:565715b018e7122a6f1b6585131f5e55a2535699b8f4e52e58794ee6c9eca20f", size = 25461, upload-time = "2026-05-12T10:15:31.139Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/8f/59/b5ce86911d1b33ddc5a4f84134150c5afd4a0e01f01844cc1e88843425c9/intellireading_cli-2.1.0-py3-none-any.whl", hash = "sha256:09ac73af788e58592298f31e9c6890910977f46800758a8fd03e6fba61556624", size = 25237, upload-time = "2025-08-27T20:15:17.563Z" },
+    { url = "https://files.pythonhosted.org/packages/87/df/a75574490bac2d56664d5f6251a4b329716e4d0bdec9425407538fcc58cc/intellireading_cli-2.1.1-py3-none-any.whl", hash = "sha256:96b944114402e51474c26ae947e98d7c2d6a1e476dc3b89fe6dfceeb1ad7f8ff", size = 26766, upload-time = "2026-05-12T10:15:29.846Z" },
 ]
 
 [[package]]
@@ -1122,11 +1122,11 @@ wheels = [
 
 [[package]]
 name = "urllib3"
-version = "2.6.3"
+version = "2.7.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6661c76461e25f024d5a38a46f04aaca912426a2b1d3/urllib3-2.6.3.tar.gz", hash = "sha256:1b62b6884944a57dbe321509ab94fd4d3b307075e0c2eae991ac71ee15ad38ed", size = 435556, upload-time = "2026-01-07T16:24:43.925Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz", hash = "sha256:231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c", size = 433602, upload-time = "2026-05-07T16:13:18.596Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
+    { url = "https://files.pythonhosted.org/packages/7f/3e/5db95bcf282c52709639744ca2a8b149baccf648e39c8cc87553df9eae0c/urllib3-2.7.0-py3-none-any.whl", hash = "sha256:9fb4c81ebbb1ce9531cce37674bbc6f1360472bc18ca9a553ede278ef7276897", size = 131087, upload-time = "2026-05-07T16:13:17.151Z" },
 ]
 
 [[package]]
