@@ -147,11 +147,14 @@ async def _process_file_request(request: Request, file: UploadFile, f):
         _request_id = _get_request_id(request)
         _request_path = request.url.path
 
-        # although we don't store the file, we'll use the secure_filename
-        # function to sanitize the filename
         _filename = secure_filename(file.filename or "")
         _filesize = file.size or 0
         _content_type = file.content_type or ""
+
+        # add the filename to the current span attributes for better observability
+        current_span_set_attribute("filename", _filename)
+        current_span_set_attribute("request_path", _request_path)
+        current_span_set_attribute("content_type", _content_type)
 
         # add metrics
         _files_transformed_counter.add(1, {"request_path": _request_path, "filename": _filename})
