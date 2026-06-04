@@ -1,16 +1,15 @@
 import logging
 from fastapi.middleware.cors import CORSMiddleware as fastapi_CORSMiddleware
-from typing import ClassVar
 
 
 class CORSMiddleware(fastapi_CORSMiddleware):
     _logger = logging.getLogger(__name__)
     middleware_config = None
     middleware_enabled = True
-    allow_origins_regex: ClassVar[None] = None
-    allow_credentials: ClassVar[bool] = False
-    max_age: ClassVar[int] = 600
-    expose_headers: ClassVar[list[str]] = []
+    allow_origins_regex: None = None
+    allow_credentials: bool = False
+    max_age: int = 600
+    expose_headers: list[str] = []  # noqa: RUF012
 
     def set_fields(self, **kwargs):
         for key, value in kwargs.items():

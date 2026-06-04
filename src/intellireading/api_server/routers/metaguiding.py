@@ -1,5 +1,4 @@
 import logging
-from typing import List, Tuple
 from fastapi import APIRouter, Depends, Request, UploadFile, HTTPException, status
 from fastapi.openapi.models import APIKey
 from intellireading.api_server.routers.authentication import get_api_key, is_turnstile_valid
@@ -59,8 +58,8 @@ def _raise_http_exception(status_code: int, message: str):
 
 # region ----------------- file validation -----------------
 def _validate_content_type_and_extension(
-    file: UploadFile, valid_content_types: List[str], valid_extensions: List[str]
-) -> Tuple[str, str]:
+    file: UploadFile, valid_content_types: list[str], valid_extensions: list[str]
+) -> tuple[str, str]:
     _filename = secure_filename(file.filename or "")
     _content_type = file.content_type or ""
     current_span_set_attribute("filename", _filename)
@@ -174,7 +173,7 @@ async def _process_file_request(request: Request, file: UploadFile, f):
         with _tracer.start_as_current_span("sending file"):
             _output_stream.seek(0)
             # TODO: move this code to a separate module (utils.py?) # pylint: disable=fixme
-            from typing import Generator
+            from collections.abc import Generator
 
             # this is a generator function that will be used to
             # stream the file content and using asyncio
